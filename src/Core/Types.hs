@@ -16,7 +16,7 @@ data Bot = Bot
 
 type Net = ReaderT Bot IO
 
-data Msg = Msg T.Text (Maybe T.Text) [T.Text] 
+data Msg = Msg T.Text (Maybe T.Text) T.Text [T.Text] -- nick chan cmd args 
          | Res T.Text
          | Act T.Text
          | Quit
@@ -26,8 +26,7 @@ data Command = Command
     , _arity   :: Int
     -- The command given is either a sequential command
     -- or a running thread in the background (i.e. has persistent state)
-    , _runCmd  :: Either (T.Text -> Maybe T.Text -> [T.Text] -> Net ())
-                         (Chan Msg, Chan Msg -> IO ())
+    , _runCmd  :: T.Text -> Maybe T.Text -> [T.Text] -> Net ()
     -- what is shown if the command is invoked incorrectly
     , _help    :: T.Text
     }
@@ -47,7 +46,7 @@ data Config = Config
 data Response = 
     Req Request
   | Join T.Text T.Text -- nick chan
-  | Part T.Text T.Text-- nick chan
+  | Part T.Text T.Text -- nick chan
   | Ping T.Text
   | Txt T.Text
 

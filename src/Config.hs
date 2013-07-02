@@ -13,9 +13,7 @@ import Data.Monoid
 
 import qualified Data.Text as T
 
-import Core.Types
-import Core.Cmds
-import Core.Connect
+import Core
 
 type JHook = T.Text -> T.Text -> Net ()
 type PHook = T.Text -> T.Text -> Net ()
@@ -36,30 +34,7 @@ run = do
   write "NICK" (c^.nick)
   write "USER" (c^.nick <> " 0 * :" <> c^.rname)
   write "JOIN" (c^.chan)
-  maybe (return ()) (\p -> privmsg "NickServ" Nothing p) (c^.pass)
+  maybe (return ()) 
+        (\p -> privmsg "NickServ" Nothing $ "identify "<>(c^.nick)<>" "<>p) 
+        (c^.pass)
   asks socket >>= listen
-
-spawn :: Command -> Net (Maybe (Chan Msg), Command)
-spawn cmd =
-  case cmd^.runCmd of
-    Left _ -> return (Nothing, cmd)
-    Right (_,f) -> do
-      ch <- liftIO newChan
-      liftIO $ forkIO (f ch)
-      return $ (Just ch, cmd & runCmd .~ (Right (ch, f)))
-        
-withHooks :: Command 
-          -> [(Chan Msg -> JHook)]
-          -> [(Chan Msg -> PHook)]
-          -> Net (Command, [JHook], [PHook])
-withHooks cmd j p = do
-    (ch, c) <- spawn cmd
-    return $ maybe (c, [], [])
-                   (\ch' -> ( c
-                   , map (\jhook -> jhook ch') j
-                   , map (\phook -> phook ch') p
-                   ))
-                   ch
-
-withJHook cmd jhook = withHooks cmd [jhook] []
-withPHook cmd phook = withHooks cmd [] [phook]

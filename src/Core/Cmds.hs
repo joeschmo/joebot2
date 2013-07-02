@@ -45,16 +45,7 @@ evalCmd cmd rcp chnl args
   | (length args) < (cmd^.arity) = do
         c <- asks config
         privmsg rcp chnl (rcp<>": "<>cmd^.help)
-  | otherwise =
-    case (cmd^.runCmd) of
-      Left run       -> run rcp chnl args
-      Right (tid, _) -> do
-        liftIO $ writeChan tid (Msg rcp chnl args)
-        txt <- liftIO $ readChan tid
-        case txt of
-          Res txt' -> privmsg rcp chnl txt'
-          Act txt' -> action txt'
-          _        -> return ()
+  | otherwise = (cmd^.runCmd) rcp chnl args
 
 -- Generic write to socket
 write :: T.Text -> T.Text -> Net ()
@@ -75,34 +66,34 @@ action s = do
     write "PRIVMSG" $ (c^.chan) <> " :\001ACTION " <> s
 
 -- Some default commands
-echo = Command "!echo" 0 (Left (\n ch args -> privmsg n ch (T.unwords args)))
+echo = Command "!echo" 0 (\n ch args -> privmsg n ch (T.unwords args))
                "!echo <text>"
 
-poke = Command "!poke" 1 (Left (\n ch args -> action $ "prods "<>(head args)))
+poke = Command "!poke" 1 (\n ch args -> action $ "prods "<>(head args))
                "!poke <nick>"
 
-slap = Command "!slap" 1 (Left (\n ch args -> action $
-                            "grabs "<>(head args)<>" and slaps them silly"))
+slap = Command "!slap" 1 (\n ch args -> action $
+                            "grabs "<>(head args)<>" and slaps them silly")
                "!slap <nick>"
 
-spoil = Command "!spoil" 1 (Left spoil') "!spoil <text>"
+spoil = Command "!spoil" 1 spoil' "!spoil <text>"
   where spoil' n ch args = privmsg n ch $ "in "<>(head args)<>", you're waifu dies"
 
-itshere = Command "!itshere" 0 (Left itshere') "!itshere"
+itshere = Command "!itshere" 0 itshere' "!itshere"
   where itshere' n ch _ = privmsg n ch $ "キターーーーーーーーーーー！！！"
 
-botsnack = Command "!botsnack" 0 (Left snack) "!botsnack"
+botsnack = Command "!botsnack" 0 snack "!botsnack"
   where snack n ch _ = privmsg n ch $ ":)"
 
-ping = Command "!ping" 1 (Left ping') "!ping <nick>"
+ping = Command "!ping" 1 ping' "!ping <nick>"
   where ping' n ch args = privmsg n ch $ (head args)<>": you there?"
 
-commands = Command "!cmds" 0 (Left commands') "!cmds"
+commands = Command "!cmds" 0 commands' "!cmds"
   where commands' n ch args = do
           c <- asks config
           privmsg n ch $ T.unwords (c^.cmds.to (map $ view cmdName))
 
-usage = Command "!help" 1 (Left usage') "!help <command>"
+usage = Command "!help" 1 usage' "!help <command>"
   where usage' n ch args = do
           cmd <- getCmd (head args)
           case cmd of
