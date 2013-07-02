@@ -10,3 +10,7 @@ import Control.Lens.Text
 
 import qualified Data.Map as M
 
+type Mailbox = M.Map T.Text [(T.Text, T.Text)]
+type MailServ = StateT Mailbox IO
+
+
