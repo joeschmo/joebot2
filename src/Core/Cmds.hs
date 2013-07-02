@@ -21,10 +21,10 @@ eval :: Response -> Net ()
 eval (Ping serv) = write "PONG" $ " :"<>serv
 eval (Part n ch) = do
     c <- asks config
-    mapM_ ($ ch) $ map ($ n) (c^.phooks)
+    mapM_ (($ ch) . ($ n)) (c^.phooks)
 eval (Join n ch) = do
     c <- asks config
-    mapM_ ($ ch) $ map ($ n) (c^.jhooks)
+    mapM_ (($ ch) . ($ n)) (c^.jhooks)
 eval (Req req) = do
     cmd <- getCmd (req^.cname)
     case cmd of
