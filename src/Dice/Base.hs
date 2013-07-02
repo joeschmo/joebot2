@@ -16,8 +16,6 @@ import Control.Monad
 import Control.Monad.Trans
 import Control.Arrow
 
-data Dice = Dice Int Int
-
 rollDieN :: Int -> IO Int
 rollDieN n = getStdRandom $ randomR (1,n)
 
@@ -30,16 +28,17 @@ rollDie n chn args = do
 parseDice s = 
     case A.parseOnly (A.try parseD <|> parseDs) s of
       Left err -> return "invalid input"
-      Right ds -> rollDice ds
+      Right (n, m) -> 
+        if n < 0 || m < 1 
+        then return "theoretically impossible rolls have left me in despair!"
+        else rollDice (n, m)
 
-parseD  = Dice <$> (pure 1) <*> (A.char 'd' *> A.decimal)
-parseDs = Dice <$> A.decimal <*> (A.char 'd' *> A.decimal)
+parseD  = (,) <$> (pure 1) <*> (A.char 'd' *> A.decimal)
+parseDs = (,) <$> A.decimal <*> (A.char 'd' *> A.decimal)
 
+rollDice :: (Int, Int) -> IO T.Text
+rollDice =
+    (\(n,m) -> replicateM n (rollDieN m)) >>>
+    ((liftM $ map (T.pack . show)) &&& (liftM $ T.pack . show . sum)) >>>
+    (uncurry $ liftM2 $ (\l s -> T.unwords l <> " | sum: " <> s))
 
-rollDice (Dice n 0) = return "zero sided dice have left me in despair!"
-rollDice (Dice n m) = do
-    rolls <- replicateM n (rollDieN m)
-    let res = map (T.pack . show) rolls
-    let total = (T.pack . show . sum) rolls
-    return $ T.unwords res <> " | sum: " <> total
-    
