@@ -10,14 +10,12 @@ joebot2 was designed to be an easy to customize and upgrade haskell irc bot.
 #The Basics
 The bare minimum for <code>Main.hs</code> is:
     import Config
-
     main = joebot $ defaultConfig
 This will run joebot2 with the default configurations specified in <code>Config.hs</code>
 
 Changing the configuration is relatively simple:
     {-# LANGUAGE OverloadedStrings #-}
     import Config
-
     main = joebot $ defaultConfig
         { _nick = "test_bot"
         , _chan = "#haskell"
