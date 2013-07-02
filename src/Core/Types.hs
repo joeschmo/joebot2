@@ -17,7 +17,7 @@ data Bot = Bot
 type Net = ReaderT Bot IO
 
 data Msg = Msg T.Text (Maybe T.Text) T.Text [T.Text] -- nick chan cmd args 
-         | Res T.Text
+         | Res [T.Text]
          | Act T.Text
          | Quit
 

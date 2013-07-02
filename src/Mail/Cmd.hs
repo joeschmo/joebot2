@@ -8,16 +8,13 @@ import Core
 import Mail.Base
 
 mail :: Chan Msg -> Command
-mail ch = Command "!mail" 1 send "!mail <nick> <text>" 
+mail ch = Command "!mail" 1 (send ch) "!mail <nick> <text>" 
 
 rcv :: Chan Msg -> Command
-rcv ch = Command "!rcv" 0 receive "!rcv"
+rcv ch = Command "!rcv" 0 (receive ch) "!rcv"
 
 inbox :: Chan Msg -> Command
-inbox ch = Command "!inbox" 0 checkInbox "!inbox"
+inbox ch = Command "!inbox" 0 (checkInbox ch) "!inbox"
 
 mHook :: Chan Msg -> T.Text -> T.Text -> Net ()
-mHook ch n chnl = do 
-  liftIO $ writeChan ch $ Msg n Nothing "!inbox" []
-  Res txt <- liftIO $ readChan ch
-  mapM_ (privmsg n Nothing) txt
+mHook ch n chnl = checkInbox ch n Nothing [] 

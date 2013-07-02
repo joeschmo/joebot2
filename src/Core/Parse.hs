@@ -16,7 +16,7 @@ import Core.Cmds
 
 toResponse s = 
     case A.parseOnly parseResponse s of
-         Left err  -> trace err $ Txt s
+         Left err  -> Txt s
          Right res -> res
 
 parseResponse =
@@ -56,11 +56,13 @@ parseReq = Req <$>
     (A.skipWhile (/= ' ') *>
      A.space *>
      A.string "PRIVMSG" *>
-     (A.try (A.skipWhile (/= '#') *>
-             pure Just <*> A.takeWhile (/= ' ')))
+     ((A.try (A.skipWhile (/= '#') *>
+              A.char '#' *> 
+              pure Just <*> (pure (T.cons '#') 
+                        <*> A.takeWhile (/= ' '))))
      <|>
-     (pure Nothing)) <*>
-    (A.space *>
+     (pure Nothing))) <*>
+    (A.skipWhile (/=':') *>
      A.char ':' *>
      A.char '!' *>
      (mappend <$> pure "!" <*> A.takeWhile (/= ' '))) <*>
