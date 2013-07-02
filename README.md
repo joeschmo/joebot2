@@ -33,12 +33,12 @@ two concepts: custom commands and plugin processes.
 ##Custom Commands
 A <code>Command</code> is roughly the type
 
-data Command = Command
-    { cmdName :: Text
-    , arity   :: Int
-    , runCmd  :: Text -> Maybe Text -> [Text] -> Net ()
-    , help    :: Text
-    }
+    data Command = Command
+        { cmdName :: Text
+        , arity   :: Int
+        , runCmd  :: Text -> Maybe Text -> [Text] -> Net ()
+        , help    :: Text
+        }
 Here is a brief description of each of the fields:
 - <code>cmdName</code> is the name of the command (e.g. "!quit")
 - <code>arity</code> is the number of arguments you expect the command to take
