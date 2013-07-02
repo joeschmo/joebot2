@@ -36,9 +36,9 @@ parseDice s =
 parseD  = (,) <$> (pure 1) <*> (A.char 'd' *> A.decimal)
 parseDs = (,) <$> A.decimal <*> (A.char 'd' *> A.decimal)
 
-rollDice :: (Int, Int) -> IO T.Text
-rollDice =
-    (\(n,m) -> replicateM n (rollDieN m)) >>>
-    ((liftM $ map (T.pack . show)) &&& (liftM $ T.pack . show . sum)) >>>
-    (uncurry $ liftM2 $ (\l s -> T.unwords l <> " | sum: " <> s))
-
+rollDice (n, m) = do
+    rolls <- replicateM n (rollDieN m)
+    let res = map (T.pack . show) rolls
+    let total = (T.pack . show . sum) rolls
+    return $ T.unwords res <> " | sum: " <> total
+    
