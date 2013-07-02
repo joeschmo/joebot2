@@ -1,0 +1,16 @@
+Name: joebot
+Version: 0.0
+Synopsis: ircbot for #roboclub
+Author: Joseph Lee
+Maintainer: josephle@andrew.cmu.edu
+Category: Development
+Build-type: Simple
+Cabal-version: >= 1.2
+
+Executable joe_bot
+  Main-Is: Main.hs
+  Hs-Source-Dirs: src
+  Build-Depends: base, text, bytestring, http-conduit, network,
+                 containers, hashmap, vector, mtl, aeson, lens,
+                 attoparsec
+  Extensions: OverloadedStrings, TemplateHaskell
