@@ -52,7 +52,7 @@ write :: T.Text -> T.Text -> Net ()
 write s t = do
     h <- asks socket
     liftIO $ BS.hPutStr h (E.encodeUtf8 (s<>" "<>t<>" \r\n")) >> hFlush h
-    liftIO $ T.putStrLn ("> "<>s<>t) >> hFlush stdout
+    liftIO $ T.putStrLn ("> "<>s<>" "<>t) >> hFlush stdout
 
 -- Private messaging
 privmsg :: T.Text -> Maybe T.Text -> T.Text -> Net ()
