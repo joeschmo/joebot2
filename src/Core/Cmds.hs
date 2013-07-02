@@ -101,3 +101,9 @@ usage = Command "!help" 1 usage' "!help <command>"
                         "no such command, use !cmd to list commands"
             Just c  -> privmsg n ch $ (c^.help)
 
+source = Command "!source" 0 source' "!source"
+  where source' n ch args = privmsg n ch $ 
+            "Source code for joebot2 is found at: https://github.com/joeschmo/joebot2"
+
+version = Command "!version" 0 version' "!version"
+  where version' n ch args = privmsg n ch $ "joebot2 version 1.0"

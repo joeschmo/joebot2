@@ -21,7 +21,7 @@ type PHook = T.Text -> T.Text -> Net ()
 defaultConfig = Config "default-bot" "ircbot" "irc.freenode.net" 6667 "#joebot-test" Nothing defaultCmds [] []
 
 defaultCmds = [ echo, poke, slap, spoil, itshere, botsnack, ping
-              , commands, usage]
+              , commands, usage, source, version]
 
 joebot :: Config -> IO ()
 joebot conf = bracket (connect conf) disconnect loop
