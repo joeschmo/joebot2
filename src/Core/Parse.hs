@@ -64,8 +64,7 @@ parseReq = Req <$>
      (pure Nothing))) <*>
     (A.skipWhile (/=':') *>
      A.char ':' *>
-     A.char '!' *>
-     (mappend <$> pure "!" <*> A.takeWhile (/= ' '))) <*>
+     A.takeWhile (/= ' ')) <*>
     ((A.try (A.space *>
       pure T.words <*> A.takeText)) <|>
       pure []))
