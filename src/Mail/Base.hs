@@ -53,13 +53,13 @@ evalMsg (Msg n _ "!mail" txt) = do
     if length txt < 1 
         then return ["!mail <nick> <text>"]
         else do
-            let sndr = head txt
+            let rcp = head txt
             let msg  = T.unwords $ tail txt
             case mbox^.at n of
               Nothing -> do
-                put (at n ?~ [(sndr, msg)] $ mbox)
+                put (at rcp ?~ [(n, msg)] $ mbox)
               Just ms -> do
-                put (at n ?~ ((sndr, msg) : ms) $ mbox)
+                put (at rcp ?~ ((n, msg) : ms) $ mbox)
             return ["Sent."]
 evalMsg (Msg n _ _ txt) = return []
 
