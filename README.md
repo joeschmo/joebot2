@@ -104,9 +104,9 @@ privmsg :: Text -> Maybe Text -> Text -> Net ()
 action  :: Text -> Net ()
 ```
 The functions do the following:
-- <code>write s t</code> writes to the server with the format <code>"s t \r\n"</code>. This is an
-extremely general function that is not recommended for use unless writing messages that are not PRIVMSG
-(e.g. QUIT).
+- <code>write s t</code> writes to the server with the format <code>"s t \r\n"</code>. This
+function is very general, so usage is not recommended. However, this function is useful for writing
+messages that are not PRIVMSG (e.g. PART, QUIT).
 - <code>privmsg nick chan text</code> writes a private message to the server. If <code>chan</code> is not specified
 (i.e. <code>Nothing</code>), the message is sent as a private message to the user with the nickname 
 <code>nick</code>. Otherwise the message is written to the channel specified by <code>chan</code>.
