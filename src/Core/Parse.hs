@@ -20,9 +20,10 @@ toResponse s =
          Right res -> res
 
 parseResponse =
-            (A.try parseJoin) <|> 
             (A.try parsePing) <|>
+            (A.try parseJoin) <|> 
             (A.try parsePart) <|>
+            (A.try parseQuit) <|>
             parseReq
 
 parsePing = Ping <$>
@@ -48,6 +49,15 @@ parsePart = Part <$>
      A.string "PART" *>
      A.space *>
      A.takeWhile (/= ' ')) 
+
+parseQuit = Part <$>
+    (A.char ':' *>
+     A.takeWhile (/= '!')) <*>
+    (A.skipWhile (/= ' ') *>
+     A.space *>
+     A.string "QUIT" *>
+     A.space *>
+     A.takeWhile (/= ' '))
     
 parseReq = Req <$>  
     (Request <$>
