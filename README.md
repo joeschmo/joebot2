@@ -33,6 +33,34 @@ Changing the configuration is relatively simple:
         , _pass = Just "fake_password"
         }
 
+More advanced users will note that joebot2 uses the 
+[Control.Lens](https://github.com/ekmett/lens#lens-lenses-folds-and-traversals)
+library extensively. The above code snippet can be then rewritten to use lenses:
+
+    {-# LANGUAGE OverloadedStrings #-}
+    import Config
+    import Control.Lens
+    import Core
+
+    main = joebot $ defaultConfig 
+        & nick .~ "test_bot"
+        & chan .~ "#haskell"
+        & pass .~ Just "fake_password"
+Whether doing so is overkill is an exercise left to the reader.
+
+The Config type has the following fields:
+   
+    data Config = Config 
+        { nick   :: Text        -- nickname of bot
+        , rname  :: Text        -- real name of bot
+        , server :: Text        -- irc server hostname
+        , port   :: Int         -- port (default 6667)
+        , chan   :: Text        -- irc channel
+        , pass   :: Maybe Text  -- password for NickServ
+        }
+There are 3 more fields, but these are the fields should be
+changed to run joe\_bot as something other than "default\_bot".
+
 #Rolling Your Own Plugins
 joebot2 was designed to make it easy to add plugins. Custom plugins are separated into
 two concepts: custom commands and plugin processes.
