@@ -16,9 +16,6 @@ import Control.Monad
 import Control.Monad.Trans
 import Control.Arrow
 
-rollDieN :: Int -> IO Int
-rollDieN n = getStdRandom $ randomR (1,n)
-
 roll = Command "!roll" 1 rollDie "!roll <num_dice>d<die_type>"
 
 rollDie n chn args = do
@@ -42,3 +39,5 @@ rollDice (n, m) = do
     let total = (T.pack . show . sum) rolls
     return $ T.unwords res <> " | sum: " <> total
     
+rollDieN :: Int -> IO Int
+rollDieN n = getStdRandom $ randomR (1,n)
