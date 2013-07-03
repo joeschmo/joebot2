@@ -50,16 +50,16 @@ Whether doing so is overkill is an exercise left to the reader.
 
 The Config type has the following fields:
    
-    data Config = Config 
-        { nick   :: Text        -- nickname of bot
-        , rname  :: Text        -- real name of bot
-        , server :: Text        -- irc server hostname
-        , port   :: Int         -- port (default 6667)
-        , chan   :: Text        -- irc channel
-        , pass   :: Maybe Text  -- password for NickServ
+    data Config = Config        -- Field Explanation      Default Value
+        { nick   :: Text        -- nickname of bot        "default-bot"
+        , rname  :: Text        -- real name of bot       "ircbot" 
+        , server :: Text        -- irc server hostname    "irc.freenode.net"
+        , port   :: Int         -- port                   6667
+        , chan   :: Text        -- irc channel            "#joebot-test"
+        , pass   :: Maybe Text  -- password for NickServ  Nothing
         }
 There are 3 more fields, but these are the fields should be
-changed to run joe\_bot as something other than "default\_bot".
+changed to run joe\_bot as something other than "default-bot".
 
 #Rolling Your Own Plugins
 joebot2 was designed to make it easy to add plugins. Custom plugins are separated into
