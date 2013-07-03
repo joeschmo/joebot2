@@ -67,12 +67,17 @@ changed to run joe\_bot as something other than "default-bot".
 joebot2 was designed to make it easy to add plugins. Custom plugins are separated into
 two concepts: custom commands and plugin processes.
 
-*Note:* it is recommended that you use the language pragma OverloadedStrings by
-adding the line
+*Note:* it is recommended that you add the following line
 ```haskell
 {-# LANGUAGE OverloadedStrings #-}
 ```
-to the top of every .hs file.
+to the top of every .hs file. Furthermore, it is recommended that you
+import [Data.Text](http://hackage.haskell.org/package/text-0.11.3.1) like so:
+```haskell
+import qualified Data.Text as T
+```
+This is due to the fact that many of the functions provided for plugin support
+rely heavily on Data.Text for performance purposes.
 
 ##Custom Commands
 A <code>Command</code> is roughly the type
