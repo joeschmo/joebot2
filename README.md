@@ -16,10 +16,11 @@ To run after installing, just run <code>joe\_bot</code>
 
 #The Basics
 The bare minimum for <code>Main.hs</code> is:
+```haskell
+import Config
 
-    import Config
-
-    main = joebot $ defaultConfig
+main = joebot $ defaultConfig
+```
 This will run joebot2 with the default configurations specified in <code>Config.hs</code>
 
 Changing the configuration is relatively simple:
