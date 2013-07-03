@@ -125,3 +125,45 @@ messages that are not PRIVMSG (e.g. PART, QUIT).
 <code>nick</code>. Otherwise the message is written to the channel specified by <code>chan</code>.
 - <code>action text</code> will make the bot perform an action on the channel specified by the initial
 configuration.
+
+##Plugin Processes
+Sometimes it is desirable for a plugin to have persistent state that joebot2 can access.
+Going in to Core.Types and changing the <code>Net ()</code> is not recommended and breaks the plugin
+abstraction. So how do we add new state to joebot2?
+
+The solution is plugin processes. Simply put, a *Plugin Process* is an IO thread that reads the command
+argument data from a channel (or channels) a la the
+[Actor Model](http://en.wikipedia.org/wiki/Actor_model).
+Due to the multithreaded nature of plugin processes, note that
+*you are responsible for your own race conditions*.
+
+That being said, [PluginUtils.hs](https://github.com/joeschmo/joebot2/blob/master/src/PluginUtils.hs)
+provides some helper functions and types for writing your own plugin process.
+
+The two types exported are:
+```haskell
+type Hook = Text -> Text -> Net ()
+type Proc = Chan Msg -> IO ()
+```
+A <code>Hook</code> is a command that is run when a user joins, parts, or quits a channel. Currently
+there are two types of hooks in Config - <code>jhooks</code> and <code>phooks</code>. These former hook is
+run when a user joins and the latter when a user parts/quits.
+
+A <code>Proc</code> is the type of a plugin util. Note that this is only a recommended type that is used
+to make process execution easier.
+
+The two functions exported are:
+```haskell
+spawnProc    :: Config 
+             -> Proc 
+             -> [Chan Msg -> Command] 
+             -> [Chan Msg -> Hook] 
+             -> [Chan Msg -> Hook] 
+             -> IO Config
+updateConfig :: Config 
+             -> Chan Msg
+             -> [Chan Msg -> Command] 
+             -> [Chan Msg -> Hook] 
+             -> [Chan Msg -> Hook] 
+             -> Config
+```
