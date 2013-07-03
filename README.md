@@ -3,6 +3,14 @@ joebot2
 
 Fully Customizable Haskell IRC Bot
 
+##Table of Contents
++ [Introduction](https://github.com/joeschmo/joebot2#introduction)
++ [Installation](https://github.com/joeschmo/joebot2#installation)
++ [The Basics](https://github.com/joeschmo/joebot2#the-basics)
++ [Rolling Your Own Plugins](https://github.com/joeschmo/joebot2#rolling-your-own-plugins)
+    + [Custom Commands](https://github.com/joeschmo/joebot2#custom-commands)
+    + [Plugin Processes](https://github.com/joeschmo/joebot2#plugin-processes)
+
 #Introduction
 joebot2 is an upgrade from the original joe\_bot that runs on irc.freenode.net #roboclub.
 joebot2 was designed to be an easy to customize and upgrade haskell irc bot.
