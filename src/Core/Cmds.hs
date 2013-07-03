@@ -18,8 +18,13 @@ import System.Exit
 import Core.Types 
 import qualified Core.Eval as E
 
+write :: T.Text -> T.Text -> Net ()
 write   = E.write
+
+privmsg :: T.Text -> Maybe T.Text -> T.Text -> Net ()
 privmsg = E.privmsg
+
+action :: T.Text -> Net ()
 action  = E.action
 
 -- Some default commands
