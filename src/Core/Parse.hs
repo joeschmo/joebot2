@@ -35,6 +35,12 @@ parseStat stat =
      A.space *>
      A.string stat)
 
+parseChan chanf =
+    (A.skipWhile (/= '#') *>
+     A.char '#' *>
+     pure chanf <*> (pure (T.cons '#')
+                <*> A.takeWhile (/= ' ')))
+
 parsePing = Ping <$>
     (A.string "PING" *>
      A.space *>
@@ -44,8 +50,7 @@ parsePing = Ping <$>
 parseStatus toRes stat = 
     parseNick toRes <*>
     (parseStat stat *>
-     A.space *>
-     A.takeWhile (/= ' '))
+     parseChan id)
 
 parseJoin = parseStatus Join "JOIN"
 
@@ -56,10 +61,7 @@ parseQuit = parseStatus Part "QUIT"
 parseReq = Req <$>  
     (parseNick Request <*>
     (parseStat "PRIVMSG" *>
-     ((A.try (A.skipWhile (/= '#') *>
-              A.char '#' *> 
-              pure Just <*> (pure (T.cons '#') 
-                        <*> A.takeWhile (/= ' '))))
+     ((A.try $ parseChan Just) 
      <|>
      (pure Nothing))) <*>
     (A.skipWhile (/=':') *>
