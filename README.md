@@ -96,6 +96,7 @@ Here is a brief description of each of the fields:
 - <code>runCmd</code> takes in a nick, a channel, and arguments and executes the command
 - <code>help</code> this is what is shown when the command is used incorrectly
 
+###Example
 A simple example of a custom command is found in the 
 [Dice Plugin](https://github.com/joeschmo/joebot2/blob/master/src/Dice/Base.hs):
 ```haskell
@@ -109,6 +110,7 @@ following arguments:
 - <code>"!roll <num_dice>d<num_sides>"</code> is shown when an inappropriate number of arguments
 is given to roll.
 
+###Helper Functions
 Note that runCmd returns a <code>Net ()</code>. In order to not expose the underlying
 implementation of <code>Net</code>, three functions have been provided:
 ```haskell
@@ -128,16 +130,18 @@ configuration.
 
 ##Plugin Processes
 Sometimes it is desirable for a plugin to have persistent state that joebot2 can access.
-Going in to Core.Types and changing the <code>Net ()</code> is not recommended and breaks the plugin
+Going in to [Core/Types.hs](https://github.com/joeschmo/joebot2/blob/master/src/Core/Types.hs)
+and changing <code>Net ()</code> is not recommended as it breaks the plugin
 abstraction. So how do we add new state to joebot2?
 
-The solution is plugin processes. Simply put, a *Plugin Process* is an IO thread that reads the command
+The solution is Plugin Processes. Simply put, a *Plugin Process* is an IO thread that reads the command
 argument data from a channel (or channels) a la the
 [Actor Model](http://en.wikipedia.org/wiki/Actor_model).
-Due to the multithreaded nature of plugin processes, note that
+Due to the multithreaded nature of plugin processes, please note that
 *you are responsible for your own race conditions*.
 
-That being said, [PluginUtils.hs](https://github.com/joeschmo/joebot2/blob/master/src/PluginUtils.hs)
+###PluginUtils
+[PluginUtils.hs](https://github.com/joeschmo/joebot2/blob/master/src/PluginUtils.hs)
 provides some helper functions and types for writing your own plugin process.
 
 The two types exported are:
