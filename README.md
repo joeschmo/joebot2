@@ -72,7 +72,8 @@ two concepts: custom commands and plugin processes.
 {-# LANGUAGE OverloadedStrings #-}
 ```
 to the top of every .hs file. Furthermore, it is recommended that you
-import [Data.Text](http://hackage.haskell.org/package/text-0.11.3.1) like so:
+import [Data.Text](http://hackage.haskell.org/packages/archive/text/0.11.3.1/doc/html/Data-Text.html) 
+like so:
 ```haskell
 import qualified Data.Text as T
 ```
