@@ -97,3 +97,20 @@ following arguments:
 - <code>rollDie</code> is the function that is invoked when the command is run.
 - <code>"!roll <num_dice>d<num_sides>"</code> is shown when an inappropriate number of arguments
 is given to roll.
+
+Note that runCmd returns a <code>Net ()</code>. In order to not expose the underlying
+implementation of <code>Net</code>, three functions have been provided:
+```haskell
+write   :: Text -> Text -> Net ()
+privmsg :: Text -> Maybe Text -> Text -> Net ()
+action  :: Text -> Net ()
+```
+The functions do the following:
+- <code>write s t</code> writes to the server with the format <code>"s t \r\n"</code>. This is an
+extremely general function that is not recommended for use unless writing messages that are not PRIVMSG
+(e.g. QUIT).
+- <code>privmsg nick chan text</code> writes a private message to the server. If <code>chan</code> is not specified
+(i.e. <code>Nothing</code>), the message is sent as a private message to the user with the nickname 
+<code>nick</code>. Otherwise the message is written to the channel specified by <code>chan</code>.
+- <code>action text</code> will make the bot perform an action on the channel specified by the initial
+configuration.
