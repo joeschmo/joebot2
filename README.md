@@ -158,11 +158,11 @@ type Hook = Text -> Text -> Net ()
 type Proc = Chan Msg -> IO ()
 ```
 A <code>Hook</code> is a command that is run when a user joins, parts, or quits a channel. Currently
-there are two types of hooks in Config - <code>jhooks</code> and <code>phooks</code>. These former hook is
+there are two types of hooks in Config - <code>jhooks</code> and <code>phooks</code>. The former hook is
 run when a user joins and the latter when a user parts/quits.
 
-A <code>Proc</code> is the type of a plugin util. Note that this is only a recommended type that is used
-to make process execution easier.
+A <code>Proc</code> is the type of a plugin process. Note that this is only a suggestion. Using
+<code>Proc</code> allows you to interface with the functions exported by PluginUtils
 
 ###PluginUtils Functions
 The two functions exported are:
