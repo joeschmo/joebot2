@@ -120,7 +120,8 @@ is given to roll.
 
 ###Helper Functions
 Note that runCmd returns a <code>Net ()</code>. In order to not expose the underlying
-implementation of <code>Net</code>, three functions have been provided:
+implementation of <code>Net</code>, three functions have been provided in 
+the <core>Core</core> module:
 ```haskell
 write   :: Text -> Text -> Net ()
 privmsg :: Text -> Maybe Text -> Text -> Net ()
@@ -173,6 +174,7 @@ spawnProc    :: Config
              -> [Chan Msg -> Hook] 
              -> [Chan Msg -> Hook] 
              -> IO Config
+
 updateConfig :: Config 
              -> Chan Msg
              -> [Chan Msg -> Command] 
@@ -180,3 +182,9 @@ updateConfig :: Config
              -> [Chan Msg -> Hook] 
              -> Config
 ```
+Both functions take in lists of commands, jhooks, and phooks.
+- <code>spawnProc</code> takes a <code>Proc</code>, creates a channel, and then runs the
+process. It then takes the newly created channel, applies all the commands and hooks 
+with it and updates the configuration.
+- <code>updateConfig</code> takes a channel and applies all the commands and hooks with it
+and then updates the configuration
