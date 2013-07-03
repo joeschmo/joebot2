@@ -24,20 +24,21 @@ main = joebot $ defaultConfig
 This will run joebot2 with the default configurations specified in <code>Config.hs</code>
 
 Changing the configuration is relatively simple:
+```haskell
+{-# LANGUAGE OverloadedStrings #-}
+import Config
 
-    {-# LANGUAGE OverloadedStrings #-}
-    import Config
-
-    main = joebot $ defaultConfig
-        { _nick = "test_bot"
-        , _chan = "#haskell"
-        , _pass = Just "fake_password"
-        }
+main = joebot $ defaultConfig
+    { _nick = "test_bot"
+    , _chan = "#haskell"
+    , _pass = Just "fake_password"
+    }
+```
 
 More advanced users will note that joebot2 uses the 
 [Control.Lens](https://github.com/ekmett/lens#lens-lenses-folds-and-traversals)
 library extensively. The above code snippet can be then rewritten to use lenses:
-
+```haskell
     {-# LANGUAGE OverloadedStrings #-}
     import Config
     import Control.Lens
@@ -47,10 +48,11 @@ library extensively. The above code snippet can be then rewritten to use lenses:
         & nick .~ "test_bot"
         & chan .~ "#haskell"
         & pass .~ Just "fake_password"
+```
 Whether doing so is overkill is an exercise left to the reader.
 
 The Config type has the following fields:
-   
+```haskell
     data Config = Config        -- Field Explanation      Default Value
         { nick   :: Text        -- nickname of bot        "default-bot"
         , rname  :: Text        -- real name of bot       "ircbot" 
@@ -59,6 +61,7 @@ The Config type has the following fields:
         , chan   :: Text        -- irc channel            "#joebot-test"
         , pass   :: Maybe Text  -- password for NickServ  Nothing
         }
+```
 There are 3 more fields, but these are the fields should be
 changed to run joe\_bot as something other than "default-bot".
 
@@ -68,13 +71,14 @@ two concepts: custom commands and plugin processes.
 
 ##Custom Commands
 A <code>Command</code> is roughly the type
-
+```haskell
     data Command = Command
         { cmdName :: Text
         , arity   :: Int
         , runCmd  :: Text -> Maybe Text -> [Text] -> Net ()
         , help    :: Text
         }
+```
 Here is a brief description of each of the fields:
 - <code>cmdName</code> is the name of the command (e.g. "!quit")
 - <code>arity</code> is the number of arguments you expect the command to take
