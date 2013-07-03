@@ -106,7 +106,7 @@ Here is a brief description of each of the fields:
 
 ###Example
 A simple example of a custom command is found in the 
-[Dice Plugin](https://github.com/joeschmo/joebot2/blob/master/src/Dice/Base.hs):
+[Dice Plugin](https://github.com/joeschmo/joebot2/blob/master/src/Plugins/Dice/Base.hs):
 ```haskell
 roll = Command "!roll" 1 rollDie "!roll <num_dice>d<num_sides>"
 ```
