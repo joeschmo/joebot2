@@ -26,46 +26,36 @@ parseResponse =
             (A.try parseQuit) <|>
             parseReq
 
+parseNick toRes = toRes <$>
+    (A.char ':' *>
+     A.takeWhile (/= '!'))
+
+parseStat stat =
+    (A.skipWhile (/= ' ') *>
+     A.space *>
+     A.string stat)
+
 parsePing = Ping <$>
     (A.string "PING" *>
      A.space *>
      A.char ':' *>
      A.takeText)
 
-parseJoin = Join <$>
-    (A.char ':' *>
-     A.takeWhile (/= '!')) <*>
-    (A.skipWhile (/= ' ') *>
-     A.space *>
-     A.string "JOIN" *>
+parseStatus toRes stat = 
+    parseNick toRes <*>
+    (parseStat stat *>
      A.space *>
      A.takeWhile (/= ' '))
 
-parsePart = Part <$>
-    (A.char ':' *>
-     A.takeWhile (/= '!')) <*>
-    (A.skipWhile (/= ' ') *>
-     A.space *>
-     A.string "PART" *>
-     A.space *>
-     A.takeWhile (/= ' ')) 
+parseJoin = parseStatus Join "JOIN"
 
-parseQuit = Part <$>
-    (A.char ':' *>
-     A.takeWhile (/= '!')) <*>
-    (A.skipWhile (/= ' ') *>
-     A.space *>
-     A.string "QUIT" *>
-     A.space *>
-     A.takeWhile (/= ' '))
-    
+parsePart = parseStatus Part "PART"
+
+parseQuit = parseStatus Part "QUIT"
+
 parseReq = Req <$>  
-    (Request <$>
-    (A.char ':' *>
-     A.takeWhile (/= '!')) <*>
-    (A.skipWhile (/= ' ') *>
-     A.space *>
-     A.string "PRIVMSG" *>
+    (parseNick Request <*>
+    (parseStat "PRIVMSG" *>
      ((A.try (A.skipWhile (/= '#') *>
               A.char '#' *> 
               pure Just <*> (pure (T.cons '#') 

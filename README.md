@@ -23,7 +23,7 @@ main = joebot $ defaultConfig
 ```
 This will run joebot2 with the default configurations specified in <code>Config.hs</code>
 
-Changing the configuration is relatively simple:
+Changing the configuration is relatively simple (note the underscore before the field name):
 ```haskell
 {-# LANGUAGE OverloadedStrings #-}
 import Config
