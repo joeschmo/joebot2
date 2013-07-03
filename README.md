@@ -4,7 +4,7 @@ joebot2
 Fully Customizable Haskell IRC Bot
 
 #Introduction
-joebot2 is an upgrade from the original joe\_bot that runs irc.freenode.net #roboclub.
+joebot2 is an upgrade from the original joe\_bot that runs on irc.freenode.net #roboclub.
 joebot2 was designed to be an easy to customize and upgrade haskell irc bot.
 
 #Installation
@@ -140,7 +140,7 @@ argument data from a channel (or channels) a la the
 Due to the multithreaded nature of plugin processes, please note that
 *you are responsible for your own race conditions*.
 
-###PluginUtils
+###PluginUtils Types
 [PluginUtils.hs](https://github.com/joeschmo/joebot2/blob/master/src/PluginUtils.hs)
 provides some helper functions and types for writing your own plugin process.
 
@@ -156,6 +156,7 @@ run when a user joins and the latter when a user parts/quits.
 A <code>Proc</code> is the type of a plugin util. Note that this is only a recommended type that is used
 to make process execution easier.
 
+###PluginUtils Functions
 The two functions exported are:
 ```haskell
 spawnProc    :: Config 
