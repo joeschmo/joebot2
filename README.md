@@ -7,6 +7,13 @@ Fully Customizable Haskell IRC Bot
 joebot2 is an upgrade from the original joe\_bot that runs irc.freenode.net #roboclub.
 joebot2 was designed to be an easy to customize and upgrade haskell irc bot.
 
+#Installation
+To install joe\_bot, you need the latest [haskell platform](http://www.haskell.org).
+Afterwards, just run <code>cabal install</code> in the directory containing
+<code>joebot.cabal</code>.
+
+To run after installing, just run <code>joe\_bot</code>
+
 #The Basics
 The bare minimum for <code>Main.hs</code> is:
 
