@@ -1,8 +1,8 @@
 import Config
 import PluginUtils
-import Mail.Base
-import Mail.Cmd
-import Dice.Base
+import Plugins.Mail.Base
+import Plugins.Mail.Cmd
+import Plugins.Dice.Base
 
 import System.Exit
 import Control.Lens

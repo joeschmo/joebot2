@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Mail.Base (mailProc, send, receive, checkInbox) where
+module Plugins.Mail.Base (mailProc, send, receive, checkInbox) where
 
 import qualified Data.Text as T
 import Control.Concurrent.Chan

@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Dice.Base (roll) where
+module Plugins.Dice.Base (roll) where
 
 import System.Random
 import Data.Char
