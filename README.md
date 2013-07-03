@@ -23,7 +23,7 @@ main = joebot $ defaultConfig
 ```
 This will run joebot2 with the default configurations specified in <code>Config.hs</code>
 
-Changing the configuration is relatively simple (note the underscore before the field name):
+Changing the configuration is relatively simple (note the underscore before each field name):
 ```haskell
 {-# LANGUAGE OverloadedStrings #-}
 import Config
@@ -84,3 +84,16 @@ Here is a brief description of each of the fields:
 - <code>arity</code> is the number of arguments you expect the command to take
 - <code>runCmd</code> takes in a nick, a channel, and arguments and executes the command
 - <code>help</code> this is what is shown when the command is used incorrectly
+
+A simple example of a custom command is found in the 
+[Dice Plugin](https://github.com/joeschmo/joebot2/blob/master/src/Dice/Base.hs):
+```haskell
+roll = Command "!roll" 1 rollDie "!roll <num_dice>d<num_sides>"
+```
+Here, we see that <code>Command</code> is the constructor, and it takes in the
+following arguments:
+- <code>"!roll"</code> is the name of the command
+- <code>1</code> roll expects 1 argument, namely an argument of the form "#d#"
+- <code>rollDie</code> is the function that is invoked when the command is run.
+- <code>"!roll <num_dice>d<num_sides>"</code> is shown when an inappropriate number of arguments
+is given to roll.
