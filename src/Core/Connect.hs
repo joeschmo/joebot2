@@ -16,7 +16,7 @@ import Data.Monoid
 
 import Core.Types
 import Core.Parse
-import Core.Cmds
+import Core.Eval
 
 connect :: Config -> IO Bot
 connect c = notify $ do

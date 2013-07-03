@@ -12,7 +12,6 @@ import Data.Monoid
 import Control.Applicative
 
 import Core.Types
-import Core.Cmds
 
 toResponse s = 
     case A.parseOnly parseResponse s of

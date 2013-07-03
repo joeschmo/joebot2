@@ -7,7 +7,7 @@ import Control.Lens
 import Data.Monoid
 
 import qualified Data.Text as T
-import Core
+import Core.Types
 
 type Hook = T.Text -> T.Text -> Net ()
 type Proc = Chan Msg -> IO ()

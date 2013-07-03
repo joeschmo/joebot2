@@ -1,5 +1,6 @@
 {-# LANGUAGE OverloadedStrings, TemplateHaskell #-}
-module Config where
+module Config ( defaultConfig
+              , joebot ) where
 
 import Network
 import System.IO
@@ -14,9 +15,7 @@ import Data.Monoid
 import qualified Data.Text as T
 
 import Core
-
-type JHook = T.Text -> T.Text -> Net ()
-type PHook = T.Text -> T.Text -> Net ()
+import Core.Connect
 
 defaultConfig = Config "default-bot" "ircbot" "irc.freenode.net" 6667 "#joebot-test" Nothing defaultCmds [] []
 

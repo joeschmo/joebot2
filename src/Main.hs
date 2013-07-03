@@ -8,6 +8,7 @@ import System.Exit
 import Control.Lens
 import Control.Monad.Trans
 import Data.Monoid
+
 import Core
 
 main = do
