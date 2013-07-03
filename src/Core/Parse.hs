@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Core.Parse where
+module Core.Parse (toResponse) where
 
 import Control.Lens
 
@@ -13,6 +13,7 @@ import Control.Applicative
 
 import Core.Types
 
+-- |Takes a 'Text' and parses it into a 'Response'
 toResponse s = 
     case A.parseOnly parseResponse s of
          Left err  -> Txt s

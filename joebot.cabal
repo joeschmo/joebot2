@@ -1,11 +1,18 @@
-Name: joebot
-Version: 0.0
-Synopsis: ircbot for #roboclub
+Name: joebot2
+Version: 1.0
+Synopsis: Fully customizable haskell IRC bot
 Author: Joseph Lee
 Maintainer: josephle@andrew.cmu.edu
 Category: Development
 Build-type: Simple
+License: MIT
+License-File: license.txt
 Cabal-version: >= 1.2
+
+Library
+  Hs-Source-Dirs: src
+  exposed-modules: Core.Types, Core.Cmds, Core.Eval, Core.Parse,
+                   Core.Connect, PluginUtils, Config
 
 Executable joe_bot
   Main-Is: Main.hs

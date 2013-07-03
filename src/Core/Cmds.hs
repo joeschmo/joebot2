@@ -18,12 +18,20 @@ import System.Exit
 import Core.Types 
 import qualified Core.Eval as E
 
+-- | Generic write to socket
 write :: T.Text -> T.Text -> Net ()
 write   = E.write
 
+-- | Used to send PRIVMSG responses to the socket.
+--
+--  > privmsg nick channel message.
+--
+--  If channel is @Nothing@, then it will send the message
+--  as a private message to nick.
 privmsg :: T.Text -> Maybe T.Text -> T.Text -> Net ()
 privmsg = E.privmsg
 
+-- | Used to send ACTION responses to the socket.
 action :: T.Text -> Net ()
 action  = E.action
 
@@ -39,7 +47,7 @@ slap = Command "!slap" 1 (\n ch args -> action $
                "!slap <nick>"
 
 spoil = Command "!spoil" 1 spoil' "!spoil <text>"
-  where spoil' n ch args = privmsg n ch $ "in "<>(head args)<>", you're waifu dies"
+  where spoil' n ch args = privmsg n ch $ "in "<>(T.unwords args)<>", you're waifu dies"
 
 itshere = Command "!itshere" 0 itshere' "!itshere"
   where itshere' n ch _ = privmsg n ch $ "キターーーーーーーーーーー！！！"
@@ -68,4 +76,4 @@ source = Command "!source" 0 source' "!source"
             "Source code for joebot2 is found at: https://github.com/joeschmo/joebot2"
 
 version = Command "!version" 0 version' "!version"
-  where version' n ch args = privmsg n ch $ "joebot2 version 1.0"
+  where version' n ch args = privmsg n ch $ "joebot2 version 1.5"

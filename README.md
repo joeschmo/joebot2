@@ -4,12 +4,13 @@ joebot2
 Fully Customizable Haskell IRC Bot
 
 ##Table of Contents
-+ [Introduction](https://github.com/joeschmo/joebot2#introduction)
-+ [Installation](https://github.com/joeschmo/joebot2#installation)
-+ [The Basics](https://github.com/joeschmo/joebot2#the-basics)
-+ [Rolling Your Own Plugins](https://github.com/joeschmo/joebot2#rolling-your-own-plugins)
-    + [Custom Commands](https://github.com/joeschmo/joebot2#custom-commands)
-    + [Plugin Processes](https://github.com/joeschmo/joebot2#plugin-processes)
++ [Introduction](#introduction)
++ [Installation](#installation)
++ [The Basics](#the-basics)
++ [Rolling Your Own Plugins](#rolling-your-own-plugins)
+    + [Custom Commands](#custom-commands)
+    + [Plugin Processes](#plugin-processes)
++ [Examples](#examples)
 
 #Introduction
 joebot2 is an upgrade from the original joe\_bot that runs on irc.freenode.net #roboclub.
@@ -20,7 +21,7 @@ To install joe\_bot, you need the latest [haskell platform](http://www.haskell.o
 Afterwards, just run <code>cabal install</code> in the directory containing
 <code>joebot.cabal</code>.
 
-To run after installing, just run <code>joe\_bot</code>
+To run after installing, just run <code>joe\_bot</code>.
 
 #The Basics
 The bare minimum for <code>Main.hs</code> is:
@@ -28,7 +29,7 @@ The bare minimum for <code>Main.hs</code> is:
 import Config
 main = joebot defaultConfig
 ```
-This will run joebot2 with the default configurations specified in <code>Config.hs</code>
+This will run joebot2 with the default configurations specified in <code>Config.hs</code>.
 
 Changing the configuration is relatively simple (note the underscore before each field name):
 ```haskell
@@ -99,21 +100,21 @@ data Command = Command
     }
 ```
 Here is a brief description of each of the fields:
-- <code>cmdName</code> is the name of the command (e.g. "!quit")
-- <code>arity</code> is the number of arguments you expect the command to take
-- <code>runCmd</code> takes in a nick, a channel, and arguments and executes the command
-- <code>help</code> this is what is shown when the command is used incorrectly
+- <code>cmdName</code> is the name of the command (e.g. "!quit").
+- <code>arity</code> is the number of arguments you expect the command to take.
+- <code>runCmd</code> takes in a nick, a channel, and arguments and executes the command.
+- <code>help</code> this is what is shown when the command is used incorrectly.
 
 ###Example
 A simple example of a custom command is found in the 
-[Dice Plugin](https://github.com/joeschmo/joebot2/blob/master/src/Plugins/Dice/Base.hs):
+[Dice Plugin](http://joeschmo.github.io/joebot2/Plugins/Roll.html):
 ```haskell
 roll = Command "!roll" 1 rollDie "!roll <num_dice>d<num_sides>"
 ```
 Here, we see that <code>Command</code> is the constructor, and it takes in the
 following arguments:
-- <code>"!roll"</code> is the name of the command
-- <code>1</code> roll expects 1 argument, namely an argument of the form "#d#"
+- <code>"!roll"</code> is the name of the command.
+- <code>1</code> roll expects 1 argument, namely an argument of the form "#d#".
 - <code>rollDie</code> is the function that is invoked when the command is run.
 - <code>"!roll <num_dice>d<num_sides>"</code> is shown when an inappropriate number of arguments
 is given to roll.
@@ -163,7 +164,7 @@ there are two types of hooks in Config - <code>jhooks</code> and <code>phooks</c
 run when a user joins and the latter when a user parts/quits.
 
 A <code>Proc</code> is the type of a plugin process. Note that this is only a suggestion. Using
-<code>Proc</code> allows you to interface with the functions exported by PluginUtils
+<code>Proc</code> allows you to interface with the functions exported by PluginUtils.
 
 ###PluginUtils Functions
 The two functions exported are:
@@ -187,4 +188,14 @@ Both functions take in lists of commands, jhooks, and phooks.
 process. It then takes the newly created channel, applies all the commands and hooks 
 with it and updates the configuration.
 - <code>updateConfig</code> takes a channel and applies all the commands and hooks with it
-and then updates the configuration
+and then updates the configuration.
+
+#Examples
+There are few example plugins packaged in with joebot2:
+- [Dice](src/Plugins/Dice/Roll.hs) is a custom command that allows joebot to roll
+any number of any kind of dice. The [annotated source](http://joeschmo.github.io/joebot2/Plugins/Roll.html)
+gives a detailed example of how this plugin was written and may be helpful to those
+who want to write plugins of their own.
+- [Mail](src/Plugins/Mail) is a mail server that allows people to send messages to
+others even when they're offline. This shows an example of how a 
+[plugin process](#plugin-processes) works, along with an example of a join hook.

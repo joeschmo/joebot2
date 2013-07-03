@@ -23,9 +23,14 @@ mailProc ch = runStateT (mailbox ch) M.empty >> return ()
 mailbox :: Chan Msg -> MailServ ()
 mailbox ch = do
     msg <- liftIO $ readChan ch
-    txts <- evalMsg msg
-    liftIO $ writeChan ch (Res txts) 
-    mailbox ch
+    case msg of
+      Quit -> do
+        liftIO $ writeChan ch $ Res []
+        return ()
+      _ -> do
+        txts <- evalMsg msg
+        liftIO $ writeChan ch (Res txts) 
+        mailbox ch
 
 evalMsg :: Msg -> MailServ [T.Text]
 evalMsg (Msg n _ "!inbox" _) = do

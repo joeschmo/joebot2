@@ -17,6 +17,7 @@ import System.Exit
 
 import Core.Types 
 
+-- | Takes a response and evaluates it.
 eval :: Response -> Net ()
 eval (Ping serv) = write "PONG" $ " :"<>serv
 eval (Part n ch) = do
@@ -32,6 +33,7 @@ eval (Req req) = do
       Just c  -> evalCmd c (req^.name) (req^.chn) (req^.tokens)
 eval _ = return ()
 
+-- | Looks up a command from the configuration
 getCmd :: T.Text -> Net (Maybe Command)
 getCmd cmd = do
     c <- asks config
@@ -39,7 +41,7 @@ getCmd cmd = do
     return $ lookup cmd cs
 
 
--- evaluate a command given name, channel, and arguments
+-- | Evaluates a command given name, channel, and arguments
 evalCmd :: Command -> T.Text -> Maybe T.Text -> [T.Text] -> Net ()
 evalCmd cmd rcp chnl args
   | (length args) < (cmd^.arity) = do
@@ -47,19 +49,19 @@ evalCmd cmd rcp chnl args
         privmsg rcp chnl (rcp<>": "<>cmd^.help)
   | otherwise = (cmd^.runCmd) rcp chnl args
 
--- Generic write to socket
+-- | Generic write to socket
 write :: T.Text -> T.Text -> Net ()
 write s t = do
     h <- asks socket
     liftIO $ BS.hPutStr h (E.encodeUtf8 (s<>" "<>t<>" \r\n")) >> hFlush h
     liftIO $ T.putStrLn ("> "<>s<>" "<>t) >> hFlush stdout
 
--- Private messaging
+-- | Private messaging
 privmsg :: T.Text -> Maybe T.Text -> T.Text -> Net ()
 privmsg n (Just ch) s = write "PRIVMSG" $ ch <> " :" <> s
 privmsg n Nothing   s = write "PRIVMSG" $ n  <> " :" <> s
 
--- Running an action
+-- | Running an action
 action :: T.Text -> Net ()
 action s = do
     c <- asks config

@@ -18,6 +18,8 @@ import Core.Types
 import Core.Parse
 import Core.Eval
 
+-- | Given a configuration, connect to a server and
+-- return a 'Bot'
 connect :: Config -> IO Bot
 connect c = notify $ do
     h <- connectTo (c^.server) $ PortNumber $ fromIntegral (c^.port)
@@ -29,6 +31,8 @@ connect c = notify $ do
       (putStrLn "done.")
       a
 
+-- | Continuously read responses from the socket
+-- | and evaluate them.
 listen :: Handle -> Net ()
 listen h = forever $ 
     (liftIO $ BS.hGetLine h) >>= 
