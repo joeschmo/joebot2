@@ -18,8 +18,7 @@ To run after installing, just run <code>joe\_bot</code>
 The bare minimum for <code>Main.hs</code> is:
 ```haskell
 import Config
-
-main = joebot $ defaultConfig
+main = joebot defaultConfig
 ```
 This will run joebot2 with the default configurations specified in <code>Config.hs</code>
 
@@ -27,7 +26,6 @@ Changing the configuration is relatively simple (note the underscore before each
 ```haskell
 {-# LANGUAGE OverloadedStrings #-}
 import Config
-
 main = joebot $ defaultConfig
     { _nick = "test_bot"
     , _chan = "#haskell"
@@ -37,13 +35,13 @@ main = joebot $ defaultConfig
 
 More advanced users will note that joebot2 uses the 
 [Control.Lens](https://github.com/ekmett/lens#lens-lenses-folds-and-traversals)
-library extensively. The above code snippet can be then rewritten to use lenses:
+library extensively. The above code snippet can be then rewritten to use lenses
+(you must import <code>Core</code> to access the lenses):
 ```haskell
 {-# LANGUAGE OverloadedStrings #-}
 import Config
 import Control.Lens
 import Core
-
 main = joebot $ defaultConfig 
     & nick .~ "test_bot"
     & chan .~ "#haskell"
