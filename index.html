@@ -27,8 +27,10 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <p>This language pragma allow ghc to
+              <p>This language pragma allows 
+GHC to
 treat string literals as Text</p>
+<h2>imports</h2>
 
             </div>
             
@@ -61,10 +63,15 @@ used to simulate dice rolls.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>This contains <code>Core.Types</code> 
-and <code>Core.Cmds</code>.
-It is mostly used for the type Command and the
-privmsg, action, and write functions</p>
+              <p>This contains 
+<a href="https://github.com/joeschmo/joebot2/blob/master/src/Core/Types.hs"><code>Core.Types</code></a>
+and 
+<a href="https://github.com/joeschmo/joebot2/blob/master/src/Core/Cmds.hs"><code>Core.Cmds</code></a>.
+It is mostly used for the type <code>Command</code> 
+along with the
+<code>privmsg</code>, 
+<code>action</code>, and 
+<code>write</code> functions.</p>
 
             </div>
             
@@ -79,7 +86,8 @@ privmsg, action, and write functions</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p><code>Data.Text</code> supports Unicode, 
+              <p><a href="http://hackage.haskell.org/packages/archive/text/0.11.3.1/doc/html/Data-Text.html"><code>Data.Text</code></a>
+supports Unicode, 
 so it&#39;s preferred
 over the base <code>String</code> type. 
 Also joebot2 uses
@@ -120,8 +128,10 @@ when using <code>Data.Monoid</code>.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>This is a parser library used to help read
-the command arguments.</p>
+              <p><a href="http://hackage.haskell.org/packages/archive/attoparsec/0.10.4.0/doc/html/Data-Attoparsec-Text.html">Attoparsec</a>
+is a parser combinator library. It is used here
+to help parse arguments to the <a href="#rollcmd">roll command</a>, 
+which expects a certain format.</p>
 
             </div>
             
@@ -138,7 +148,9 @@ the command arguments.</p>
               </div>
               <p>This is a general library that helps
 compact Attoparsec code, and reduces the 
-use of monads.</p>
+use of monads. For more information about this
+library and <code>Data.Monoid</code>, refer to
+Brent Yorgey&#39;s <a href="http://www.haskell.org/haskellwiki/Typeclassopedia">Typeclassopedia</a>.</p>
 
             </div>
             
@@ -157,6 +169,7 @@ use of monads.</p>
               </div>
               <p>The <code>liftIO</code> function allows the running
 of IO actions in the <code>Net</code> monad</p>
+<h2>T<a id="rollcmd"></a>he roll command</h2>
 
             </div>
             
@@ -171,8 +184,7 @@ of IO actions in the <code>Net</code> monad</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
-              <p>The roll command.
-This command is invoked when somebody invokes
+              <p>This command is invoked when somebody invokes
 &quot;!roll&quot; on the channel.
 The arguments to Command are the command name, the arity,
 the function to run, and the help message.</p>
@@ -224,13 +236,11 @@ Arity is checked before this command is executed, so
               </div>
               <p>Print out the result of <code>parseEvalDice</code>
 to the IRC server</p>
+<h2>parser</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    privmsg n chn msg
-
-
-<span class="title">parseEvalDice</span> s =</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    privmsg n chn msg</pre></div></div>
             
         </li>
         
@@ -241,11 +251,12 @@ to the IRC server</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
-              <p>Try to parse either &quot;dX&quot; or &quot;XdX&quot;</p>
+              <p>Take in a string and try to parse out the number
+dice and the number of sides per die.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">case</span> <span class="type">A</span>.parseOnly (<span class="type">A</span>.try parseDie &lt;|&gt; parseDice) s <span class="keyword">of</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="title">parseEvalDice</span> s =</pre></div></div>
             
         </li>
         
@@ -256,11 +267,11 @@ to the IRC server</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
-              <p>If the parse fails, return &quot;invalid input&quot;</p>
+              <p>Try to parse either &quot;dX&quot; or &quot;XdX&quot;</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      <span class="type">Left</span> err -&gt; return <span class="string">"invalid input"</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">case</span> <span class="type">A</span>.parseOnly (<span class="type">A</span>.try parseDie &lt;|&gt; parseDice) s <span class="keyword">of</span></pre></div></div>
             
         </li>
         
@@ -270,6 +281,21 @@ to the IRC server</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>If the parse fails, return &quot;invalid input&quot;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="type">Left</span> err -&gt; return <span class="string">"invalid input"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
               <p>If it succeeds first check the arguments to see if they&#39;re logical.
 If they are, then roll the dice.</p>
@@ -284,11 +310,11 @@ If they are, then roll the dice.</p>
         </li>
         
         
-        <li id="section-16">
+        <li id="section-17">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-16">&#182;</a>
+                <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
               <p>A parser for &quot;dX&quot; where X is a number. This results in a 1dX roll.</p>
 
@@ -299,13 +325,14 @@ If they are, then roll the dice.</p>
         </li>
         
         
-        <li id="section-17">
+        <li id="section-18">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-17">&#182;</a>
+                <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
               <p>A parser for &quot;XdX&quot;.</p>
+<h2>Dice Rolling</h2>
 
             </div>
             
@@ -314,11 +341,11 @@ If they are, then roll the dice.</p>
         </li>
         
         
-        <li id="section-18">
+        <li id="section-19">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-18">&#182;</a>
+                <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
               <p>The code for rolling the die, the arguments are
 number of dice and number of sides, respectively.</p>
@@ -330,11 +357,11 @@ number of dice and number of sides, respectively.</p>
         </li>
         
         
-        <li id="section-19">
+        <li id="section-20">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-19">&#182;</a>
+                <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
               <p>Do n rolls of m sides. <code>replicateM</code>
 performs a monadic action <em>n</em> number of times.</p>
@@ -346,11 +373,11 @@ performs a monadic action <em>n</em> number of times.</p>
         </li>
         
         
-        <li id="section-20">
+        <li id="section-21">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-20">&#182;</a>
+                <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
               <p><code>res</code> holds all the roll results as Text.</p>
 
@@ -361,11 +388,11 @@ performs a monadic action <em>n</em> number of times.</p>
         </li>
         
         
-        <li id="section-21">
+        <li id="section-22">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-21">&#182;</a>
+                <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
               <p><code>total</code> holds the total of all the rolls as Text.</p>
 
@@ -376,11 +403,11 @@ performs a monadic action <em>n</em> number of times.</p>
         </li>
         
         
-        <li id="section-22">
+        <li id="section-23">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
+                <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
               <p>Return both <code>res</code> and <code>total</code> with some
 light formatting.</p>
@@ -392,11 +419,11 @@ light formatting.</p>
         </li>
         
         
-        <li id="section-23">
+        <li id="section-24">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-23">&#182;</a>
+                <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
               <p>The actual die rolling function. Gets a random <code>Int</code>
 from 1 to n.</p>
