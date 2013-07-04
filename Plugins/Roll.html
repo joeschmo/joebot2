@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Roll.hs</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>Roll.hs</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p>This language pragma allows 
+GHC to
+treat string literals as Text</p>
+<h2>imports</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="preprocessor">{-# LANGUAGE OverloadedStrings #-}</span>
+
+<span class="module"><span class="keyword">module</span> Plugins.Dice.Roll <span class="container">(<span class="title">roll</span>)</span> <span class="keyword">where</span></span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Import the pseudorandom number generator
+used to simulate dice rolls.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="import"><span class="keyword">import</span> System.Random</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>This contains 
+<a href="https://github.com/joeschmo/joebot2/blob/master/src/Core/Types.hs"><code>Core.Types</code></a>
+and 
+<a href="https://github.com/joeschmo/joebot2/blob/master/src/Core/Cmds.hs"><code>Core.Cmds</code></a>.
+It is mostly used for the type <code>Command</code> 
+along with the
+<code>privmsg</code>, 
+<code>action</code>, and 
+<code>write</code> functions.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="import"><span class="keyword">import</span> Core</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p><a href="http://hackage.haskell.org/packages/archive/text/0.11.3.1/doc/html/Data-Text.html"><code>Data.Text</code></a>
+supports Unicode, 
+so it&#39;s preferred
+over the base <code>String</code> type. 
+Also joebot2 uses
+<code>Text</code> extensively.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="import"><span class="keyword">import</span> <span class="keyword">qualified</span> Data.Text <span class="keyword">as</span> T</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>This is mostly used for <code>(&lt;&gt;)</code>, which
+is a generic way of doing concatenation.
+This way the code will not be littered with
+<code>T.append</code>s. For example,</p>
+<p><pre><code>T.append s t</code></pre>
+becomes</p>
+<p><pre><code>s &lt;&gt; t</code></pre>
+when using <code>Data.Monoid</code>.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="import"><span class="keyword">import</span> Data.Monoid</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p><a href="http://hackage.haskell.org/packages/archive/attoparsec/0.10.4.0/doc/html/Data-Attoparsec-Text.html">Attoparsec</a>
+is a parser combinator library. It is used here
+to help parse arguments to the <a href="#rollcmd">roll command</a>, 
+which expects a certain format.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="import"><span class="keyword">import</span> <span class="keyword">qualified</span> Data.Attoparsec.Text <span class="keyword">as</span> A</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>This is a general library that helps
+compact Attoparsec code, and reduces the 
+use of monads. For more information about this
+library and <code>Data.Monoid</code>, refer to
+Brent Yorgey&#39;s <a href="http://www.haskell.org/haskellwiki/Typeclassopedia">Typeclassopedia</a>.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="import"><span class="keyword">import</span> Control.Applicative</span>
+
+<span class="import"><span class="keyword">import</span> Control.Monad</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>The <code>liftIO</code> function allows the running
+of IO actions in the <code>Net</code> monad</p>
+<h2>T<a id="rollcmd"></a>he roll command</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="import"><span class="keyword">import</span> Control.Monad.Trans <span class="container">(<span class="title">liftIO</span>)</span></span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>This command is invoked when somebody invokes
+&quot;!roll&quot; on the channel.
+The arguments to Command are the command name, the arity,
+the function to run, and the help message.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="title">roll</span> = <span class="type">Command</span> <span class="string">"!roll"</span> <span class="number">1</span> rollDie <span class="string">"!roll &lt;num_dice&gt;d&lt;die_type&gt;"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>This function is invoked when the roll command is run.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="title">rollDie</span> n chn args = <span class="keyword">do</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Take in the first argument and parse it.
+Arity is checked before this command is executed, so
+<code>args</code> won&#39;t be empty.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    msg &lt;- liftIO $ parseEvalDice (head args)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Print out the result of <code>parseEvalDice</code>
+to the IRC server</p>
+<h2>parser</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    privmsg n chn msg</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Take in a string and try to parse out the number
+dice and the number of sides per die.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="title">parseEvalDice</span> s =</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>Try to parse either &quot;dX&quot; or &quot;XdX&quot;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">case</span> <span class="type">A</span>.parseOnly (<span class="type">A</span>.try parseDie &lt;|&gt; parseDice) s <span class="keyword">of</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>If the parse fails, return &quot;invalid input&quot;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="type">Left</span> err -&gt; return <span class="string">"invalid input"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>If it succeeds first check the arguments to see if they&#39;re logical.
+If they are, then roll the dice.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="type">Right</span> (n, m) -&gt; 
+        <span class="keyword">if</span> n &lt; <span class="number">0</span> || m &lt; <span class="number">1</span> 
+        <span class="keyword">then</span> return <span class="string">"theoretically impossible rolls have left me in despair!"</span>
+        <span class="keyword">else</span> rollDice n m</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>A parser for &quot;dX&quot; where X is a number. This results in a 1dX roll.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="title">parseDie</span>  = (,) &lt;$&gt; (pure <span class="number">1</span>) &lt;*&gt; (<span class="type">A</span>.char<span class="string"> 'd'</span> *&gt; <span class="type">A</span>.decimal)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>A parser for &quot;XdX&quot;.</p>
+<h2>Dice Rolling</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="title">parseDice</span> = (,) &lt;$&gt; <span class="type">A</span>.decimal &lt;*&gt; (<span class="type">A</span>.char<span class="string"> 'd'</span> *&gt; <span class="type">A</span>.decimal)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>The code for rolling the die, the arguments are
+number of dice and number of sides, respectively.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="title">rollDice</span> n m = <span class="keyword">do</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Do n rolls of m sides. <code>replicateM</code>
+performs a monadic action <em>n</em> number of times.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    rolls &lt;- replicateM n (rollDieN m)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p><code>res</code> holds all the roll results as Text.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">let</span> res = map (<span class="type">T</span>.pack . show) rolls</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p><code>total</code> holds the total of all the rolls as Text.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">let</span> total = (<span class="type">T</span>.pack . show . sum) rolls</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>Return both <code>res</code> and <code>total</code> with some
+light formatting.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    return $ <span class="type">T</span>.unwords res &lt;&gt; <span class="string">" | sum: "</span> &lt;&gt; total</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>The actual die rolling function. Gets a random <code>Int</code>
+from 1 to n.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="title">rollDieN</span> :: <span class="type">Int</span> -&gt; <span class="type">IO</span> <span class="type">Int</span>
+<span class="title">rollDieN</span> n = getStdRandom $ randomR (<span class="number">1</span>,n)</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
