@@ -21,7 +21,7 @@ main = do
                     [mail, rcv, inbox]
                     [mHook]
                     []
-  joebot $ conf2 & cmds %~ ((<>) [roll, quit])
+  joebot $ conf & cmds %~ ((<>) [roll, quit])
 
 quit = Command "!quit" 0 quit' "!quit"
   where quit' _ _ _ = do
