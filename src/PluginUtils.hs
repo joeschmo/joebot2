@@ -23,11 +23,12 @@ spawnProc :: Config
           -> [Chan Msg -> Command] 
           -> [Chan Msg -> Hook] 
           -> [Chan Msg -> Hook] 
+          -> Bool
           -> IO Config
-spawnProc conf proc coms js ps = do
+spawnProc conf proc coms js ps quit = do
     ch <- newChan
     forkIO $ proc ch
-    return $ updateConfig conf ch coms js ps 
+    return $ updateConfig conf ch coms js ps quit 
 
 -- |Updates a configuration with a series of
 -- commands and hooks.
@@ -36,9 +37,13 @@ updateConfig :: Config
              -> [Chan Msg -> Command]
              -> [Chan Msg -> Hook]
              -> [Chan Msg -> Hook]
+             -> Bool
              -> Config
-updateConfig conf ch coms js ps =
-    conf & cmds %~ ((<>) (map ($ ch) coms))
-         & jhooks %~ ((<>) (map ($ ch) js))
-         & phooks %~ ((<>) (map ($ ch) ps))
-         & procChans %~ ((:) ch)
+updateConfig conf ch coms js ps quit =
+    let 
+      procCh = if quit then [ch] else []
+    in
+      conf & cmds %~ ((<>) (map ($ ch) coms))
+           & jhooks %~ ((<>) (map ($ ch) js))
+           & phooks %~ ((<>) (map ($ ch) ps))
+           & procChans %~ ((<>) procCh)
