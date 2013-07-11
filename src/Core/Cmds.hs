@@ -39,7 +39,7 @@ action  = E.action
 echo = Command "!echo" 0 (\n ch args -> privmsg n ch (T.unwords args))
                "!echo <text>"
 
-poke = Command "!poke" 1 (\n ch args -> action $ "prods "<>(head args))
+poke = Command "!poke" 1 (\n ch args -> action $ "prods "<>(T.unwords args))
                "!poke <nick>"
 
 slap = Command "!slap" 1 (\n ch args -> action $
