@@ -174,6 +174,7 @@ spawnProc    :: Config
              -> [Chan Msg -> Command] 
              -> [Chan Msg -> Hook] 
              -> [Chan Msg -> Hook] 
+             -> Bool
              -> IO Config
 
 updateConfig :: Config 
@@ -181,12 +182,14 @@ updateConfig :: Config
              -> [Chan Msg -> Command] 
              -> [Chan Msg -> Hook] 
              -> [Chan Msg -> Hook] 
+             -> Bool
              -> Config
 ```
 Both functions take in lists of commands, jhooks, and phooks.
 - <code>spawnProc</code> takes a <code>Proc</code>, creates a channel, and then runs the
 process. It then takes the newly created channel, applies all the commands and hooks 
-with it and updates the configuration.
+with it and updates the configuration. The final boolean argument is to tell joe_bot whether
+or not to send a <code>Quit</code> message to the process upon shutdown.
 - <code>updateConfig</code> takes a channel and applies all the commands and hooks with it
 and then updates the configuration.
 
