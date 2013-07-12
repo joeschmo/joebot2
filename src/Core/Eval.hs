@@ -40,14 +40,11 @@ getCmd cmd = do
     let cs = zip (c^.cmds.to (map $ view cmdName)) (c^.cmds)
     return $ lookup cmd cs
 
-
 -- | Evaluates a command given name, channel, and arguments
 evalCmd :: Command -> T.Text -> Maybe T.Text -> [T.Text] -> Net ()
 evalCmd cmd rcp chnl args
-  | (length args) < (cmd^.arity) = do
-        c <- asks config
-        privmsg rcp chnl (rcp<>": "<>cmd^.help)
-  | otherwise = (cmd^.runCmd) rcp chnl args
+  | (length args) < (cmd^.arity) = privmsg rcp chnl (rcp<>": "<>cmd^.help)
+  | otherwise                    = (cmd^.runCmd) rcp chnl args
 
 -- | Generic write to socket
 write :: T.Text -> T.Text -> Net ()
