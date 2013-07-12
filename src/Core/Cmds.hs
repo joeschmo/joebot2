@@ -43,7 +43,7 @@ poke = Command "!poke" 1 (\n ch args -> action $ "prods "<>(T.unwords args))
                "!poke <nick>"
 
 slap = Command "!slap" 1 (\n ch args -> action $
-                            "grabs "<>(head args)<>" and slaps them silly")
+                            "grabs "<>(T.unwords args)<>" and slaps them silly")
                "!slap <nick>"
 
 spoil = Command "!spoil" 1 spoil' "!spoil <text>"
