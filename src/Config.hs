@@ -31,7 +31,7 @@ import Core.Connect
 --
 --      [@cmds@] see 'Cmds' for a list of all commands in the default configuration
 --
-defaultConfig = Config "default-bot" "ircbot" "irc.freenode.net" 6667 "#joebot-test" Nothing defaultCmds [] [] []
+defaultConfig = Config "default-bot" "ircbot" "irc.freenode.net" 6667 "#joebot-test" Nothing defaultCmds [] [] [] []
 
 defaultCmds = [ echo, poke, slap, spoil, itshere, botsnack, ping
               , commands, usage, source, version]

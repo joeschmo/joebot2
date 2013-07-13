@@ -29,7 +29,10 @@ eval (Join n ch) = do
 eval (Req req) = do
     cmd <- getCmd (req^.cname)
     case cmd of
-      Nothing -> return ()
+      Nothing -> do
+        c <- asks config
+        let txt = T.unwords (req^.cname : req^.tokens)
+        mapM_ (($ txt) . ($ req^.name)) (c^.thooks)
       Just c  -> evalCmd c (req^.name) (req^.chn) (req^.tokens)
 eval _ = return ()
 

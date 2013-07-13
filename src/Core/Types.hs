@@ -59,6 +59,9 @@ data Config = Config
     , _pass   :: Maybe T.Text
       -- | All the commands the bot can invoke
     , _cmds   :: [Command]
+      -- | Catch all for commands that do not conform to
+      --   the command spec, i.e. Text hooks
+    , _thooks :: [T.Text -> T.Text -> Net ()]
       -- | Join hooks
     , _jhooks :: [T.Text -> T.Text -> Net ()]
       -- | Part/Quit hooks
