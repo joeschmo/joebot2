@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Plugins.Mail.Base (mailProc, send, receive, checkInbox) where
+module Joebot.Plugins.Mail.Base (mailProc, send, receive, checkInbox) where
 
 import qualified Data.Text as T
 import Control.Concurrent.Chan
@@ -12,7 +12,7 @@ import Data.Monoid
 import qualified Data.Map as M
 import qualified Data.Foldable as F
 
-import Core
+import Joebot.Core
 
 type Mailbox = M.Map T.Text [(T.Text, T.Text)]
 type MailServ = StateT Mailbox IO

@@ -7,7 +7,7 @@ import Control.Lens
 import Data.Monoid
 
 import qualified Data.Text as T
-import Core.Types
+import Joebot.Core.Types
 
 -- |The type for a hook (Join and Part)
 type Hook = T.Text -> T.Text -> Net ()

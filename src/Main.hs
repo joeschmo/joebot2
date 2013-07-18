@@ -1,11 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 import Config
 import PluginUtils
-import Plugins.Mail.Base
-import Plugins.Mail.Cmd
-import Plugins.Dice.Roll
-import Plugins.Steam.Core
-import Plugins.Steam.Cmds
+import Joebot.Plugins.Mail.Base
+import Joebot.Plugins.Mail.Cmd
+import Joebot.Plugins.Dice.Roll
+import Joebot.Plugins.Steam.Core
+import Joebot.Plugins.Steam.Cmds
 
 import Control.Concurrent.Chan
 
@@ -13,7 +13,7 @@ import System.Exit
 import Control.Lens
 import Control.Monad.Reader
 import Data.Monoid
-import Core
+import Joebot.Core
 
 main = do
   conf <- spawnProc defaultConfig
