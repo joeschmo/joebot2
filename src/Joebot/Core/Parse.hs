@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Core.Parse (toResponse) where
+module Joebot.Core.Parse (toResponse) where
 
 import Control.Lens
 
@@ -11,7 +11,7 @@ import Debug.Trace
 import Data.Monoid
 import Control.Applicative
 
-import Core.Types
+import Joebot.Core.Types
 
 -- |Takes a 'Text' and parses it into a 'Response'
 toResponse s = 

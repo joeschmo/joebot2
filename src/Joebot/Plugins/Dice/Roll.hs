@@ -4,7 +4,7 @@
 -- ##imports
 {-# LANGUAGE OverloadedStrings #-}
 
-module Plugins.Dice.Roll (roll) where
+module Joebot.Plugins.Dice.Roll (roll) where
 
 -- Import the pseudorandom number generator
 -- used to simulate dice rolls.
@@ -19,7 +19,7 @@ import System.Random
 -- <code>privmsg</code>, 
 -- <code>action</code>, and 
 -- <code>write</code> functions.
-import Core
+import Joebot.Core
 
 -- [<code>Data.Text</code>](http://hackage.haskell.org/packages/archive/text/0.11.3.1/doc/html/Data-Text.html)
 -- supports Unicode, 

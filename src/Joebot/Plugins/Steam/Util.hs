@@ -1,6 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-
-module Plugins.Steam.Util where
+module Joebot.Plugins.Steam.Util where
 
 import qualified Data.ByteString.Lazy as LBS
 import qualified Data.Text as T
@@ -18,7 +17,7 @@ import qualified Data.Vector as V
 import Control.Monad
 import Control.Monad.State
 
-import Plugins.Steam.Types
+import Joebot.Plugins.Steam.Types
 
 getUserJson :: T.Text -> T.Text -> IO LBS.ByteString
 getUserJson sid apikey = do

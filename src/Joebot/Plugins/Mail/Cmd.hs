@@ -1,11 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Plugins.Mail.Cmd where
+module Joebot.Plugins.Mail.Cmd where
 
 import qualified Data.Text as T
 import Control.Concurrent.Chan
 
-import Core
-import Plugins.Mail.Base
+import Joebot.Core
+import Joebot.Plugins.Mail.Base
 
 mail :: Chan Msg -> Command
 mail ch = Command "!mail" 1 (send ch) "!mail <nick> <text> -- send a message" 

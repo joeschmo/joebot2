@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Plugins.Steam.Cmds where
+module Joebot.Plugins.Steam.Cmds where
 
 import Data.Monoid
 import Control.Concurrent.Chan
@@ -7,13 +7,13 @@ import System.IO
 
 import qualified Data.Map as M
 import qualified Data.Text as T
-import Core
+import Joebot.Core
 import Control.Monad.State
 import Control.Lens
 
-import Plugins.Steam.Core
-import Plugins.Steam.Types
-import Plugins.Steam.Util
+import Joebot.Plugins.Steam.Core
+import Joebot.Plugins.Steam.Types
+import Joebot.Plugins.Steam.Util
 
 sreg ch = Command "!sreg" 1 (register ch) "!sreg <steam id> -- Register steam name to list"
 

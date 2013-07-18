@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Plugins.Steam.Core where
+module Joebot.Plugins.Steam.Core where
 
 import Data.Monoid
 import Data.Either
@@ -11,10 +11,10 @@ import System.IO
 import qualified Data.Map as M
 import qualified Data.Text as T
 import qualified Data.ByteString.Lazy as LBS
-import Core
+import Joebot.Core
 
-import Plugins.Steam.Types
-import Plugins.Steam.Util
+import Joebot.Plugins.Steam.Types
+import Joebot.Plugins.Steam.Util
 
 userServ :: Chan Msg -> UserServ ()
 userServ ch =

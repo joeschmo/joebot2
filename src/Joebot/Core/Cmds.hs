@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Core.Cmds where
+module Joebot.Core.Cmds where
 
 import Network
 import System.IO
@@ -15,8 +15,8 @@ import qualified Data.ByteString as BS
 import qualified Data.Text.Encoding as E
 import System.Exit
 
-import Core.Types 
-import qualified Core.Eval as E
+import Joebot.Core.Types 
+import qualified Joebot.Core.Eval as E
 
 -- | Generic write to socket
 write :: T.Text -> T.Text -> Net ()

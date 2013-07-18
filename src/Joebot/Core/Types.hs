@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings, TemplateHaskell, ImpredicativeTypes #-}
-module Core.Types where
+module Joebot.Core.Types where
 
 import qualified Data.Text as T
 import Control.Lens
