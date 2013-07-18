@@ -1,5 +1,5 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Plugins.Steam.Types where
+module Joebot.Plugins.Steam.Types where
 
 import qualified Data.Text as T
 import qualified Data.Map as M

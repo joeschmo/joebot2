@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Core.Eval where
+module Joebot.Core.Eval where
 
 import Network
 import System.IO
@@ -15,7 +15,7 @@ import qualified Data.ByteString as BS
 import qualified Data.Text.Encoding as E
 import System.Exit
 
-import Core.Types 
+import Joebot.Core.Types 
 
 -- | Takes a response and evaluates it.
 eval :: Response -> Net ()

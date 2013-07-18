@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings, TemplateHaskell #-}
-module Core.Connect where
+module Joebot.Core.Connect where
 
 import Network
 import System.IO
@@ -14,9 +14,9 @@ import qualified Data.ByteString as BS
 
 import Data.Monoid
 
-import Core.Types
-import Core.Parse
-import Core.Eval
+import Joebot.Core.Types
+import Joebot.Core.Parse
+import Joebot.Core.Eval
 
 -- | Given a configuration, connect to a server and
 -- return a 'Bot'

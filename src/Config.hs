@@ -14,8 +14,8 @@ import Data.Monoid
 
 import qualified Data.Text as T
 
-import Core
-import Core.Connect
+import Joebot.Core
+import Joebot.Core.Connect
 
 -- | Default configuration for joebot2
 --

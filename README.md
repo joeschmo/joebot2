@@ -140,7 +140,7 @@ configuration.
 
 ##Plugin Processes
 Sometimes it is desirable for a plugin to have persistent state that joebot2 can access.
-Going in to [Core/Types.hs](https://github.com/joeschmo/joebot2/blob/master/src/Core/Types.hs)
+Going in to [Core.Types](src/Joebot/Core/Types.hs)
 and changing <code>Net ()</code> is not recommended as it breaks the plugin
 abstraction. So how do we add new state to joebot2?
 
@@ -151,7 +151,7 @@ Due to the multithreaded nature of plugin processes, please note that
 *you are responsible for your own race conditions*.
 
 ###PluginUtils Types
-[PluginUtils.hs](https://github.com/joeschmo/joebot2/blob/master/src/PluginUtils.hs)
+[PluginUtils.hs](src/PluginUtils.hs)
 provides some helper functions and types for writing your own plugin process.
 
 The two types exported are:
@@ -195,10 +195,10 @@ and then updates the configuration.
 
 #Examples
 There are few example plugins packaged in with joebot2:
-- [Dice](src/Plugins/Dice/Roll.hs) is a custom command that allows joebot to roll
+- [Dice](src/Joebot/Plugins/Dice/Roll.hs) is a custom command that allows joebot to roll
 any number of any kind of dice. The [annotated source](http://joeschmo.github.io/joebot2/Plugins/Roll.html)
 gives a detailed example of how this plugin was written and may be helpful to those
 who want to write plugins of their own.
-- [Mail](src/Plugins/Mail) is a mail server that allows people to send messages to
+- [Mail](src/Joebot/Plugins/Mail) is a mail server that allows people to send messages to
 others even when they're offline. This shows an example of how a 
 [plugin process](#plugin-processes) works, along with an example of a join hook.
