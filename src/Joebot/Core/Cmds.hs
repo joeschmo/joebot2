@@ -17,6 +17,7 @@ import System.Exit
 
 import Joebot.Core.Types 
 import qualified Joebot.Core.Eval as E
+import Joebot.Core.Parse
 
 -- | Generic write to socket
 write :: T.Text -> T.Text -> Net ()
@@ -34,6 +35,10 @@ privmsg = E.privmsg
 -- | Used to send ACTION responses to the socket.
 action :: T.Text -> Net ()
 action  = E.action
+
+-- | Used to run a text as a command
+runRawCmd :: T.Text -> Net ()
+runRawCmd = E.eval . toResponse 
 
 -- Some default commands
 echo = Command "!echo" 0 (\n ch args -> privmsg n ch (T.unwords args))
