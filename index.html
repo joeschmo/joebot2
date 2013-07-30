@@ -20,7 +20,7 @@
 
     <body>
       <div class="jumbotron text-center">
-        <h1>joebot2</h1>
+        <h1 id="joebot-title">joebot2</h1>
         <h4>
         A fully customizable Haskell IRC bot. Running on
         irc.freenode.net #roboclub.
@@ -30,11 +30,14 @@
       <div class="col-lg-4 text-center">
         <h2> Written in Haskell </h2>
         <p>
-          joebot uses the latest in Hackage Library support, including
+          joebot was written in
+          <a href="http://www.haskell.org">Haskell</a>, allowing
+          for rapid development while enjoying great robustness.
+          joebot uses the latest Hackage libraries, including
           <a href="http://hackage.haskell.org/package/lens-3.9.0.2">Control.Lens</a>.
           The 
           <a href="https://github.com/joeschmo/joebot2/tree/master/src/Joebot/Core">Core</a>
-          of joebot is designed to be small so that it's easier to modify
+          of joebot is designed to be small so it's easier to modify
           the inner workings of joebot.
         </p>
       </div>
@@ -42,7 +45,7 @@
       <div class="col-lg-4 text-center">
         <h2> Open Source </h2>
         <p>
-          joebot's source is given under the 
+          joebot's source is covered by the 
           <a href="http://opensource.org/licenses/MIT">MIT license</a>, 
           allowing anyone to fork, modify, and use joebot as they please.
         </p>
@@ -54,7 +57,8 @@
           The plugin system was written to make writing addons as painless as possible.
           Many of joebot's commands are written as 
           <a href="https://github.com/joeschmo/joebot2/tree/master/src/Joebot/Plugins">plugins</a>, 
-          keeping the Core clutter-free.
+          keeping the Core clutter-free. Documentation on how to write new plugins is provided
+          <a href="https://github.com/joeschmo/joebot2#rolling-your-own-plugins">here</a>.
         </p>
       </div>
       </div>
