@@ -9,6 +9,7 @@
       <link type="text/css" href="assets/css/bootstrap.min.css" rel="stylesheet">
       <link type="text/css" href="assets/css/main.css" rel="stylesheet">
       <script type="text/javascript" src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+      <script type="text/javascript" src="http://www.cssnewbie.com/download/jquery.equalheights.js"></script>
       <script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
     </head>
 
@@ -38,7 +39,7 @@
       <div id="description" class="row">
       <div class="col-lg-4 text-center">
         <h2> Written in Haskell </h2>
-        <p>
+        <p class="desc">
           joebot was written in
           <a href="http://www.haskell.org">Haskell</a>, allowing
           for rapid development while enjoying great robustness.
@@ -49,44 +50,40 @@
           of joebot is designed to be small so it's easier to modify
           the inner workings of joebot.
         </p>
+        <a class="btn btn-info btn-large" href="Core/index.html">
+          Documentation
+        </a>
       </div>
 
       <div class="col-lg-4 text-center">
         <h2> Open Source </h2>
-        <p>
+        <p class="desc">
           joebot's source is covered by the 
           <a href="http://opensource.org/licenses/MIT">MIT license</a>, 
           allowing anyone to fork, modify, and use joebot as they please.
         </p>
+        <a class="btn btn-primary btn-large" href="https://github.com/joeschmo/joebot2">
+          View Repo
+        </a>
       </div>
 
       <div class="col-lg-4 text-center">
         <h2> Modular Design </h2>
-        <p>
+        <p class="desc">
           The plugin system was written to make writing addons as painless as possible.
           Many of joebot's commands are written as 
           <a href="https://github.com/joeschmo/joebot2/tree/master/src/Joebot/Plugins">plugins</a>, 
           keeping the Core clutter-free. Documentation on how to write new plugins is provided
           <a href="https://github.com/joeschmo/joebot2#rolling-your-own-plugins">here</a>.
         </p>
+        <a class="btn btn-info btn-large" href="Plugins/Roll.html">
+          Dice Example
+        </a>
       </div>
-      </div>
-      <div id="links" class="row">
-        <div class="col-lg-4 text-center">
-          <a class="btn btn-info btn-large" href="Core/index.html">
-            Documentation
-          </a>
-        </div>
-        <div class="col-lg-4 text-center">
-          <a class="btn btn-primary btn-large" href="https://github.com/joeschmo/joebot2">
-            View Repo
-          </a>
-        </div>
-        <div class="col-lg-4 text-center">
-          <a class="btn btn-info btn-large" href="Plugins/Roll.html">
-            Dice Example
-          </a>
-        </div>
-      </div>
+     </div>
     </body>
+
+    <script>
+      $(".desc").equalHeights();
+    </script>
 </html>
