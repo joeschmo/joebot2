@@ -69,7 +69,7 @@ data Config = Config        -- Field Explanation      Default Value
     , pass   :: Maybe Text  -- password for NickServ  Nothing
     }
 ```
-There are 3 more fields, but these are the fields should be
+There are 3 more fields, but these are the fields that should be
 changed to run joe\_bot as something other than "default-bot".
 
 #Rolling Your Own Plugins
@@ -87,7 +87,7 @@ like so:
 import qualified Data.Text as T
 ```
 This is due to the fact that many of the functions provided for plugin support
-rely heavily on Data.Text for performance purposes.
+rely heavily on Data.Text for performance and compatibility purposes.
 
 ##Custom Commands
 A <code>Command</code> is roughly the type
@@ -103,7 +103,7 @@ Here is a brief description of each of the fields:
 - <code>cmdName</code> is the name of the command (e.g. "!quit").
 - <code>arity</code> is the number of arguments you expect the command to take.
 - <code>runCmd</code> takes in a nick, a channel, and arguments and executes the command.
-- <code>help</code> this is what is shown when the command is used incorrectly.
+- <code>help</code> is shown when the command is used incorrectly.
 
 ###Example
 A simple example of a custom command is found in the 
