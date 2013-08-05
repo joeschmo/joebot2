@@ -63,12 +63,12 @@ commands = Command "!cmds" 0 commands' "!cmds"
           c <- asks config
           privmsg n ch $ T.unwords (c^.cmds.to (map $ view cmdName))
 
-usage = Command "!help" 1 usage' "!help <command>"
+usage = Command "!help" 1 usage' "!help <command>. Explains how to use a command. Use !cmds to list commands"
   where usage' n ch args = do
           cmd <- E.getCmd (head args)
           case cmd of
             Nothing -> privmsg n ch $ 
-                        "no such command, use !cmd to list commands"
+                        "no such command, use !cmds to list commands"
             Just c  -> privmsg n ch $ (c^.help)
 
 source = Command "!source" 0 source' "!source"
