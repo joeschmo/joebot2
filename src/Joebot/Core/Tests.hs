@@ -16,30 +16,29 @@ prop_joinparse stat n ch =
   let
     to_parse = ":"<>n<>"!"<>stat<>" JOIN #"<>ch
   in
-    case toResponse to_parse of
-      Join _ _ -> True
-      _        -> False
+    toResponse to_parse == Join n ("#"<>ch)
 
 prop_partparse stat n ch =
   (T.length n > 0 && T.length ch > 0) ==>
   let
     to_parse = ":"<>n<>"!"<>stat<>" PART #"<>ch
   in
-    case toResponse to_parse of
-      Part _ _ -> True
-      _        -> False
+    toResponse to_parse == Part n ("#"<>ch)
 
-prop_privmsgparse stat n ch msg =
-  (T.length n > 0 && T.length ch > 0) ==>
+prop_privmsgparse stat n ch cn toks =
+  (T.length n > 0 && T.length ch > 0 && T.length cn > 0
+  && all (\t -> T.length t > 0) toks) ==>
   let
-    to_parse = ":"<>n<>"!"<>stat<>" PRIVMSG #"<>ch<>" :"<>msg
+    to_parse = ":"<>n<>"!"<>stat<>" PRIVMSG #"<>ch<>" :"<>cn<>" "<>(T.intercalate " " toks)
   in
-    case toResponse to_parse of
-      Req _ -> True
-      _     -> False
+    toResponse to_parse == Req (Request n (Just $ "#"<>ch) cn toks) 
 
 instance Arbitrary T.Text where
   arbitrary = 
-    (listOf $ suchThat arbitrary (not . isSpace)) 
+    (listOf $ suchThat arbitrary 
+        (\c -> isAscii c 
+            && (not $ isSpace c)
+            && (c /= '!')
+            && (c /= '#')))
     >>= return . T.pack
 

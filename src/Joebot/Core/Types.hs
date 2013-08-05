@@ -76,6 +76,7 @@ data Response =
   | Part T.Text T.Text -- nick chan
   | Ping T.Text
   | Txt T.Text
+  deriving Eq
 
 data Request = Request
     { _name   :: T.Text
@@ -83,6 +84,7 @@ data Request = Request
     , _cname  :: T.Text
     , _tokens :: [T.Text]
     }
+    deriving Eq
 
 makeLenses ''Command
 makeLenses ''Config
