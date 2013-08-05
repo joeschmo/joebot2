@@ -9,20 +9,45 @@ import Joebot.Plugins.Steam.Cmds
 
 import Control.Concurrent.Chan
 
+import System.Console.GetOpt
+import System.Environment
+import Test.QuickCheck
+
 import System.Exit
 import Control.Lens
 import Control.Monad.Reader
 import Data.Monoid
 import Joebot.Core
+import Joebot.Core.Tests
 
 main = do
-  conf <- spawnProc defaultConfig
-                    mailProc 
-                    [mail, rcv, inbox]
-                    [mHook]
-                    []
-                    False
-  joebot $ conf & cmds %~ ((<>) [roll, quit])
+  argv <- getArgs
+  checkOpts argv $ do 
+    conf <- spawnProc defaultConfig
+                      mailProc 
+                      [mail, rcv, inbox]
+                      [mHook]
+                      []
+                      False
+    joebot $ conf & cmds %~ ((<>) [roll, quit])
+
+data Flag = Testing
+
+checkOpts argv action =
+  case getOpt Permute options argv of
+       (o,n,[]) -> runOpts o action
+       (_,_,err) -> action
+
+runOpts (Testing : rem) action = do
+  quickCheck prop_joinparse
+  quickCheck prop_partparse
+  quickCheck prop_privmsgparse
+runOpts [] action = action
+  
+
+options :: [OptDescr Flag]
+options =
+  [ Option [] ["testing"] (NoArg Testing) "Run joebot test suite" ]
 
 quit = Command "!quit" 0 quit' "!quit"
   where quit' _ _ _ = do
