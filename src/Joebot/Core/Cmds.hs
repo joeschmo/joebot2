@@ -36,7 +36,7 @@ privmsg = E.privmsg
 action :: T.Text -> Net ()
 action  = E.action
 
--- | Used to run a text as a command
+-- | Used to run a text as a command.
 runRawCmd :: T.Text -> Net ()
 runRawCmd = E.eval . toResponse 
 
