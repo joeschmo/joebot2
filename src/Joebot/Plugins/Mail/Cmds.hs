@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Joebot.Plugins.Mail.Cmd where
+module Joebot.Plugins.Mail.Cmds where
 
 import qualified Data.Text as T
 import Control.Concurrent.Chan
@@ -17,4 +17,7 @@ inbox :: Chan Msg -> Command
 inbox ch = Command "!inbox" 0 (checkInbox ch) "!inbox -- check how many messages you have"
 
 mHook :: Chan Msg -> T.Text -> T.Text -> Net ()
-mHook ch n chnl = checkInbox ch n Nothing [] 
+mHook ch n chnl = checkInbox ch n Nothing []
+
+runMailServer :: Chan Msg -> IO ()
+runMailServer ch = mailProc ch

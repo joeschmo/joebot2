@@ -1,10 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 import Config
 import PluginUtils
-import Joebot.Plugins.Mail.Base
-import Joebot.Plugins.Mail.Cmd
+import Joebot.Plugins.Mail.Cmds
 import Joebot.Plugins.Dice.Roll
-import Joebot.Plugins.Steam.Core
 import Joebot.Plugins.Steam.Cmds
 
 import Control.Concurrent.Chan
@@ -24,7 +22,7 @@ main = do
   argv <- getArgs
   checkOpts argv $ do 
     conf <- spawnProc defaultConfig
-                      mailProc 
+                      runMailServer 
                       [mail, rcv, inbox]
                       [mHook]
                       []
