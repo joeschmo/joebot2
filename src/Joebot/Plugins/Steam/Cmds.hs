@@ -15,6 +15,8 @@ import Joebot.Plugins.Steam.Core
 import Joebot.Plugins.Steam.Types
 import Joebot.Plugins.Steam.Util
 
+runSteamServer ch = userServ ch 
+
 sreg ch = Command "!sreg" 1 (register ch) "!sreg <steam id> -- Register steam name to list"
 
 slist ch = Command "!slist" 0 (steamlist ch) "!slist -- Show status of people on steam"
