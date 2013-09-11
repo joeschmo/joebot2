@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 import Config
-import PluginUtils
+import Joebot.Plugins.Utils
 import Joebot.Plugins.Mail.Cmds
 import Joebot.Plugins.Dice.Roll
 import Joebot.Plugins.Steam.Cmds
