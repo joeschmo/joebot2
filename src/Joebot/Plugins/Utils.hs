@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module PluginUtils where
+module Joebot.Plugins.Utils where
 
 import Control.Concurrent.Chan
 import Control.Concurrent
