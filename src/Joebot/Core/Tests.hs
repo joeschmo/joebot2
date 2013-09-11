@@ -9,6 +9,7 @@ import Joebot.Core.Types
 import Joebot.Core.Parse
 import Data.Monoid
 import Data.Char
+import Control.Applicative
 import Test.QuickCheck
 
 prop_joinparse stat n ch =
@@ -35,10 +36,10 @@ prop_privmsgparse stat n ch cn toks =
 
 instance Arbitrary T.Text where
   arbitrary = 
+    pure T.pack <*>
     (listOf $ suchThat arbitrary 
         (\c -> isAscii c 
             && (not $ isSpace c)
             && (c /= '!')
             && (c /= '#')))
-    >>= return . T.pack
 
