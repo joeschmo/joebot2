@@ -16,6 +16,7 @@ import qualified Data.Text as T
 
 import Joebot.Core
 import Joebot.Core.Connect
+import Joebot.Plugins.Prelude
 
 -- | Default configuration for joebot2
 --
@@ -34,7 +35,7 @@ import Joebot.Core.Connect
 defaultConfig = Config "default-bot" "ircbot" "irc.freenode.net" 6667 "#joebot-test" Nothing defaultCmds [] [] [] []
 
 defaultCmds = [ echo, poke, slap, spoil, itshere, botsnack, ping
-              , commands, usage, source, version]
+              , commands, usage, source, version ]
 
 -- | Takes a 'Config' and runs joebot2
 joebot :: Config -> IO ()
