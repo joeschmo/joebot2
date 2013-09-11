@@ -151,7 +151,7 @@ Due to the multithreaded nature of plugin processes, please note that
 *you are responsible for your own race conditions*.
 
 ###Plugins.Utils Types
-[Plugins/Utils.hs](src/Plugins/Utils.hs)
+[Plugins/Utils.hs](src/Joebot/Plugins/Utils.hs)
 provides some helper functions and types for writing your own plugin process.
 
 The two types exported are:
