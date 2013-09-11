@@ -150,8 +150,8 @@ argument data from a channel (or channels) a la the
 Due to the multithreaded nature of plugin processes, please note that
 *you are responsible for your own race conditions*.
 
-###PluginUtils Types
-[PluginUtils.hs](src/PluginUtils.hs)
+###Plugins.Utils Types
+[Plugins/Utils.hs](src/Plugins/Utils.hs)
 provides some helper functions and types for writing your own plugin process.
 
 The two types exported are:
@@ -166,7 +166,7 @@ run when a user joins and the latter when a user parts/quits.
 A <code>Proc</code> is the type of a plugin process. Note that this is only a suggestion. Using
 <code>Proc</code> allows you to interface with the functions exported by PluginUtils.
 
-###PluginUtils Functions
+###Plugins.Utils Functions
 The two functions exported are:
 ```haskell
 spawnProc    :: Config 
