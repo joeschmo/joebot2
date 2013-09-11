@@ -6,6 +6,7 @@ import System.IO
 import Control.Exception
 import Control.Monad.Reader
 import Control.Lens
+import Control.Applicative
 import Text.Printf
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
@@ -35,8 +36,7 @@ connect c = notify $ do
 -- | and evaluate them.
 listen :: Handle -> Net ()
 listen h = forever $ 
-    (liftIO $ BS.hGetLine h) >>= 
-    (return . T.init . E.decodeUtf8) >>= (\s ->
-    (liftIO $ T.putStrLn s) >>
-    (eval . toResponse) s)
+    (pure $ T.init . E.decodeUtf8) <*> (liftIO $ BS.hGetLine h) >>=
+    (\s -> (liftIO $ T.putStrLn s) >>
+      (eval . toResponse) s)
 

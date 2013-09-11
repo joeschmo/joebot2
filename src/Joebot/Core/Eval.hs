@@ -7,6 +7,8 @@ import Text.Printf
 import Control.Monad.Reader
 import Control.Lens
 import Control.Concurrent.Chan
+
+import Control.Applicative
 import Data.Monoid
 
 import qualified Data.Text as T
@@ -20,12 +22,8 @@ import Joebot.Core.Types
 -- | Takes a response and evaluates it.
 eval :: Response -> Net ()
 eval (Ping serv) = write "PONG" $ " :"<>serv
-eval (Part n ch) = do
-    c <- asks config
-    mapM_ (($ ch) . ($ n)) (c^.phooks)
-eval (Join n ch) = do
-    c <- asks config
-    mapM_ (($ ch) . ($ n)) (c^.jhooks)
+eval (Part n ch) = asks config >>= mapM_ (($ ch) . ($ n)) . (^.phooks)
+eval (Join n ch) = asks config >>= mapM_ (($ ch) . ($ n)) . (^.jhooks)
 eval (Req req) = do
     cmd <- getCmd (req^.cname)
     case cmd of
