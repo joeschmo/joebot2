@@ -7,6 +7,8 @@ import Text.Printf
 import Control.Monad.Reader
 import Control.Lens
 import Control.Concurrent.Chan
+
+import Control.Applicative
 import Data.Monoid
 
 import qualified Data.Text as T
@@ -20,13 +22,9 @@ import Joebot.Core.Types
 -- | Takes a response and evaluates it.
 eval :: Response -> Net ()
 eval (Ping serv) = write "PONG" $ " :"<>serv
-eval (Part n ch) = do
-    c <- asks config
-    mapM_ (($ ch) . ($ n)) (c^.phooks)
-eval (Join n ch) = do
-    c <- asks config
-    mapM_ (($ ch) . ($ n)) (c^.jhooks)
-eval (Req req) = do
+eval (Part n ch) = asks config >>= mapM_ (($ ch) . ($ n)) . (^.phooks)
+eval (Join n ch) = asks config >>= mapM_ (($ ch) . ($ n)) . (^.jhooks)
+eval (Req req)   = do
     cmd <- getCmd (req^.cname)
     case cmd of
       Nothing -> do
@@ -63,8 +61,7 @@ privmsg n Nothing   s = write "PRIVMSG" $ n  <> " :" <> s
 
 -- | Running an action
 action :: T.Text -> Net ()
-action s = do
-    c <- asks config
-    write "PRIVMSG" $ (c^.chan) <> " :\001ACTION " <> s
+action s = asks config >>= 
+  (\c -> write "PRIVMSG" $ (c^.chan) <> " :\001ACTION " <> s)
 
 
