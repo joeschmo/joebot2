@@ -29,7 +29,7 @@ The bare minimum for <code>Main.hs</code> is:
 import Config
 main = joebot defaultConfig
 ```
-This will run joebot2 with the default configurations specified in <code>Config.hs</code>.
+This will run joebot2 with the default configurations specified in [<code>Config.hs</code>](src/Config.hs).
 
 Changing the configuration is relatively simple (note the underscore before each field name):
 ```haskell
