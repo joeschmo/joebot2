@@ -32,13 +32,13 @@ prop_privmsgparse stat n ch cn toks =
   let
     to_parse = ":"<>n<>"!"<>stat<>" PRIVMSG #"<>ch<>" :"<>cn<>" "<>(T.intercalate " " toks)
   in
-    toResponse to_parse == Req (Request n (Just $ "#"<>ch) cn toks) 
+    toResponse to_parse == Req (Request n (Just $ "#"<>ch) cn toks)
 
 instance Arbitrary T.Text where
-  arbitrary = 
+  arbitrary =
     pure T.pack <*>
-    (listOf $ suchThat arbitrary 
-        (\c -> isAscii c 
+    (listOf $ suchThat arbitrary
+        (\c -> isAscii c
             && (not $ isSpace c)
             && (c /= '!')
             && (c /= '#')))

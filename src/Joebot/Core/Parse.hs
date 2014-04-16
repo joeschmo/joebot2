@@ -20,10 +20,10 @@ toResponse s =
          Right res -> res
 
 parseResponse =
-            (A.try parsePing) <|>
-            (A.try parseJoin) <|> 
-            (A.try parsePart) <|>
-            (A.try parseQuit) <|>
+            A.try parsePing <|>
+            A.try parseJoin <|> 
+            A.try parsePart <|>
+            A.try parseQuit <|>
             parseReq
 
 parseNick toRes = toRes <$>
@@ -31,15 +31,15 @@ parseNick toRes = toRes <$>
      A.takeWhile (/= '!'))
 
 parseStat stat =
-    (A.skipWhile (/= ' ') *>
-     A.space *>
-     A.string stat)
+    A.skipWhile (/= ' ') *>
+    A.space *>
+    A.string stat
 
 parseChan chanf =
-    (A.skipWhile (/= '#') *>
-     A.char '#' *>
-     pure chanf <*> (pure (T.cons '#')
-                <*> A.takeWhile (/= ' ')))
+    A.skipWhile (/= '#') *>
+    A.char '#' *>
+    pure chanf <*> (pure (T.cons '#')
+               <*> A.takeWhile (/= ' '))
 
 parsePing = Ping <$>
     (A.string "PING" *>
@@ -61,12 +61,12 @@ parseQuit = parseStatus Part "QUIT"
 parseReq = Req <$>  
     (parseNick Request <*>
     (parseStat "PRIVMSG" *>
-     ((A.try $ parseChan Just) 
+     (A.try (parseChan Just) 
      <|>
-     (pure Nothing))) <*>
+     pure Nothing)) <*>
     (A.skipWhile (/=':') *>
      A.char ':' *>
      A.takeWhile (/= ' ')) <*>
-    ((A.try (A.space *>
-      pure T.words <*> A.takeText)) <|>
-      pure []))
+    (A.try (A.space *>
+     pure T.words <*> A.takeText) <|>
+     pure []))

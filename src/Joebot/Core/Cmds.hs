@@ -38,5 +38,5 @@ action  = E.action
 
 -- | Used to grab the help messages of a Cmd
 getHelp :: T.Text -> Net (Maybe T.Text)
-getHelp cmd = (pure $ maybe Nothing (^.help.to Just)) <*> E.getCmd cmd
+getHelp cmd = pure (maybe Nothing (^.help.to Just)) <*> E.getCmd cmd
 

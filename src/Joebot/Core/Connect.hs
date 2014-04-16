@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings, TemplateHaskell #-}
+{-# LANGUAGE OverloadedStrings #-}
 module Joebot.Core.Connect where
 
 import Network
@@ -27,16 +27,15 @@ connect c = notify $ do
     hSetBuffering h NoBuffering
     return $ Bot h c
   where
-    notify a = bracket_
+    notify = bracket_
       (printf "Connecting to %s ... " (c^.server) >> hFlush stdout)
       (putStrLn "done.")
-      a
 
 -- | Continuously read responses from the socket
 -- | and evaluate them.
 listen :: Handle -> Net ()
 listen h = forever $ 
-    (pure $ T.init . E.decodeUtf8) <*> (liftIO $ BS.hGetLine h) >>=
-    (\s -> (liftIO $ T.putStrLn s) >>
+    pure (T.init . E.decodeUtf8) <*> liftIO (BS.hGetLine h) >>=
+    (\s -> liftIO (T.putStrLn s) >>
       (eval . toResponse) s)
 

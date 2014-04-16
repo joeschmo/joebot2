@@ -20,14 +20,18 @@ import Joebot.Core.Tests
 
 main = do
   argv <- getArgs
-  checkOpts argv $ do 
+  checkOpts argv $ do
     conf <- spawnProc defaultConfig
-                      runMailServer 
+                      runMailServer
                       [mail, rcv, inbox]
                       [mHook]
                       []
                       False
-    joebot $ conf & cmds %~ ((<>) [roll, quit])
+    joebot $ conf
+        & cmds %~ (<>) [roll, quit]
+        & nick .~ "joe_bot"
+        & chan .~ "#roboclub"
+        & pass .~ Just "cantbotthis"
 
 data Flag = Testing
 
@@ -41,7 +45,7 @@ runOpts (Testing : rem) action = do
   quickCheck prop_partparse
   quickCheck prop_privmsgparse
 runOpts [] action = action
-  
+
 
 options :: [OptDescr Flag]
 options =
@@ -50,9 +54,9 @@ options =
 quit = Command "!quit" 0 quit' "!quit"
   where quit' _ _ _ = do
           c <- asks config
-          mapM_ (\ch -> 
+          mapM_ (\ch ->
                   liftIO $ writeChan ch Quit
-                  >> readChan ch) 
+                  >> readChan ch)
                 (c^.procChans)
           write "QUIT" ":Deactivated"
-          liftIO $ exitWith ExitSuccess
+          liftIO exitSuccess
