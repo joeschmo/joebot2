@@ -89,7 +89,7 @@ parseEvalDice s =
         else rollDice n m
 
 -- A parser for "dX" where X is a number. This results in a 1dX roll.
-parseDie  = (,) <$> (pure 1) <*> (A.char 'd' *> A.decimal)
+parseDie  = (,) <$> pure 1 <*> (A.char 'd' *> A.decimal)
 -- A parser for "XdX".
 -- ##Dice Rolling
 parseDice = (,) <$> A.decimal <*> (A.char 'd' *> A.decimal)

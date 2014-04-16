@@ -20,4 +20,4 @@ mHook :: Chan Msg -> T.Text -> T.Text -> Net ()
 mHook ch n chnl = checkInbox ch n Nothing []
 
 runMailServer :: Chan Msg -> IO ()
-runMailServer ch = mailProc ch
+runMailServer = mailProc

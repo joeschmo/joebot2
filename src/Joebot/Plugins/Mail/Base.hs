@@ -4,6 +4,7 @@ module Joebot.Plugins.Mail.Base (mailProc, send, receive, checkInbox) where
 import qualified Data.Text as T
 import Control.Concurrent.Chan
 import Control.Monad.State
+import Control.Monad
 import Control.Arrow
 import Control.Lens
 import Data.Text.Lens
@@ -18,7 +19,7 @@ type Mailbox = M.Map T.Text [(T.Text, T.Text)]
 type MailServ = StateT Mailbox IO
 
 mailProc :: Chan Msg -> IO ()
-mailProc ch = runStateT (mailbox ch) M.empty >> return ()
+mailProc ch = void $ runStateT (mailbox ch) M.empty
 
 mailbox :: Chan Msg -> MailServ ()
 mailbox ch = do
@@ -33,9 +34,10 @@ evalMsg (Msg n _ "!inbox" _) = do
     case mbox^.at n of
       Nothing -> return ["Your inbox is empty"]
       Just ms ->
-        if null ms then return ["Your inbox is empty"]
-        else return ["You have "<>(ms^.to length^.to show^. packed)<>
-                     " msg(s). "<>"Use !rcv to read."]
+        return $
+          if null ms then ["Your inbox is empty"]
+          else ["You have "<>(ms^.to length^.to show^. packed)<>
+                " msg(s). "<>"Use !rcv to read."]
 evalMsg (Msg n _ "!rcv" _) = do
     mbox <- get
     case mbox^.at n of
@@ -56,10 +58,8 @@ evalMsg (Msg n _ "!mail" txt) = do
             let rcp = head txt
             let msg  = T.unwords $ tail txt
             case mbox^.at n of
-              Nothing -> do
-                put (at rcp ?~ [(n, msg)] $ mbox)
-              Just ms -> do
-                put (at rcp ?~ ((n, msg) : ms) $ mbox)
+              Nothing -> put (at rcp ?~ [(n, msg)] $ mbox)
+              Just ms -> put (at rcp ?~ ((n, msg) : ms) $ mbox)
             return ["Sent."]
 evalMsg (Msg n _ _ txt) = return []
 
@@ -69,7 +69,7 @@ queryBox ch n chn cmd txt help = do
     liftIO $ writeChan ch $ Msg n chn cmd txt
     (Res msgs) <- liftIO $ readChan ch
     if null msgs 
-        then (privmsg n Nothing $ "usage: "<>help)
+        then privmsg n Nothing $ "usage: "<>help
         else mapM_ (privmsg n Nothing) msgs
 
 send ch n chn txt = do

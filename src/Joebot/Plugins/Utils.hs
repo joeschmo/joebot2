@@ -41,9 +41,9 @@ updateConfig :: Config
              -> Config
 updateConfig conf ch coms js ps quit =
     let 
-      procCh = if quit then [ch] else []
+      procCh = [ ch | quit ] 
     in
-      conf & cmds %~ ((<>) (map ($ ch) coms))
-           & jhooks %~ ((<>) (map ($ ch) js))
-           & phooks %~ ((<>) (map ($ ch) ps))
-           & procChans %~ ((<>) procCh)
+      conf & cmds %~ (<>) (map ($ ch) coms)
+           & jhooks %~ (<>) (map ($ ch) js)
+           & phooks %~ (<>) (map ($ ch) ps)
+           & procChans %~ (<>) procCh
