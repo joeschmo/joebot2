@@ -29,9 +29,6 @@ main = do
                       False
     joebot $ conf
         & cmds %~ (<>) [roll, quit]
-        & nick .~ "joe_bot"
-        & chan .~ "#roboclub"
-        & pass .~ Just "cantbotthis"
 
 data Flag = Testing
 

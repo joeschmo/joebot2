@@ -49,7 +49,7 @@ usage = Command "!help" 1 usage' "!help <command>. Explains how to use a command
   where usage' n ch args = do
           h <- getHelp (head args)
           case h of
-            Nothing -> privmsg n ch 
+            Nothing -> privmsg n ch
                         "no such command, use !cmds to list commands"
             Just c  -> privmsg n ch c
 

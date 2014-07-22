@@ -25,7 +25,7 @@ mailbox :: Chan Msg -> MailServ ()
 mailbox ch = do
     msg <- liftIO $ readChan ch
     txts <- evalMsg msg
-    liftIO $ writeChan ch (Res txts) 
+    liftIO $ writeChan ch (Res txts)
     mailbox ch
 
 evalMsg :: Msg -> MailServ [T.Text]
@@ -45,14 +45,14 @@ evalMsg (Msg n _ "!rcv" _) = do
       Just ms -> do
             put (at n ?~ [] $ mbox)
             return $
-                F.foldl' 
+                F.foldl'
                     (\msgs (sndr, msg) ->
                         ("From "<>sndr<>":") : msg : msgs)
                     []
                     ms
 evalMsg (Msg n _ "!mail" txt) = do
     mbox <- get
-    if length txt < 1 
+    if length txt < 1
         then return ["!mail <nick> <text>"]
         else do
             let rcp = head txt
@@ -63,19 +63,19 @@ evalMsg (Msg n _ "!mail" txt) = do
             return ["Sent."]
 evalMsg (Msg n _ _ txt) = return []
 
-queryBox :: Chan Msg -> T.Text -> Maybe T.Text 
+queryBox :: Chan Msg -> T.Text -> Maybe T.Text
          -> T.Text -> [T.Text] -> T.Text -> Net ()
 queryBox ch n chn cmd txt help = do
     liftIO $ writeChan ch $ Msg n chn cmd txt
     (Res msgs) <- liftIO $ readChan ch
-    if null msgs 
+    if null msgs
         then privmsg n Nothing $ "usage: "<>help
         else mapM_ (privmsg n Nothing) msgs
 
 send ch n chn txt = do
     liftIO $ writeChan ch $ Msg n chn "!mail" txt
     (Res msgs) <- liftIO $ readChan ch
-    mapM_ (privmsg n Nothing) msgs
+    mapM_ (privmsg n chn) msgs
     privmsg (head txt) Nothing "You have new mail. Use !rcv to read."
 
 receive ch n chn txt = queryBox ch n chn "!rcv" [] "Your inbox is empty."
