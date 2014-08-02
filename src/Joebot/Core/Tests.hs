@@ -40,6 +40,4 @@ instance Arbitrary T.Text where
     (listOf $ suchThat arbitrary
         (\c -> isAscii c
             && (not $ isSpace c)
-            && (c /= '!')
-            && (c /= '#')))
-
+            && (c /= '!')))
