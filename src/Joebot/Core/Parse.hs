@@ -14,14 +14,14 @@ import Control.Applicative
 import Joebot.Core.Types
 
 -- |Takes a 'Text' and parses it into a 'Response'
-toResponse s = 
+toResponse s =
     case A.parseOnly parseResponse s of
          Left err  -> Txt s
          Right res -> res
 
 parseResponse =
             A.try parsePing <|>
-            A.try parseJoin <|> 
+            A.try parseJoin <|>
             A.try parsePart <|>
             A.try parseQuit <|>
             parseReq
@@ -36,7 +36,7 @@ parseStat stat =
     A.string stat
 
 parseChan chanf =
-    A.skipWhile (/= '#') *>
+    A.skipWhile (not . ((flip elem) ":#")) *>
     A.char '#' *>
     pure chanf <*> (pure (T.cons '#')
                <*> A.takeWhile (/= ' '))
@@ -47,7 +47,7 @@ parsePing = Ping <$>
      A.char ':' *>
      A.takeText)
 
-parseStatus toRes stat = 
+parseStatus toRes stat =
     parseNick toRes <*>
     (parseStat stat *>
      parseChan id)
@@ -58,10 +58,10 @@ parsePart = parseStatus Part "PART"
 
 parseQuit = parseStatus Part "QUIT"
 
-parseReq = Req <$>  
+parseReq = Req <$>
     (parseNick Request <*>
     (parseStat "PRIVMSG" *>
-     (A.try (parseChan Just) 
+     (A.try (parseChan Just)
      <|>
      pure Nothing)) <*>
     (A.skipWhile (/=':') *>
