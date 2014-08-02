@@ -8,6 +8,7 @@ import Control.Lens
 import Control.Exception
 import Control.Concurrent
 import Control.Concurrent.Chan
+import Control.Concurrent.Async
 import Control.Monad.Reader
 
 import Data.Monoid
@@ -32,27 +33,37 @@ import Joebot.Plugins.Prelude
 --
 --      [@cmds@] see 'Cmds' for a list of all commands in the default configuration
 --
-defaultConfig = 
-  Config 
-    "default-bot" 
-    "ircbot" 
-    "irc.freenode.net" 
-    6667 
-    "#joebot-test" 
-    Nothing 
-    defaultCmds 
-    [] 
-    [] 
-    [] 
+defaultConfig =
+  Config
+    "default-bot"
+    "ircbot"
+    "irc.freenode.net"
+    6667
+    "#joebot-test"
+    Nothing
+    defaultCmds
+    []
+    []
+    []
     []
     False
 
 defaultCmds = [ echo, poke, slap, spoil, itshere, botsnack, ping
               , commands, usage, source, version ]
 
--- | Takes a 'Config' and runs joebot2
 joebot :: Config -> IO ()
-joebot conf = bracket (connect conf) disconnect loop
+joebot conf = do
+  ch <- newChan
+  let conf' = conf & procChans %~ (:) ch
+  async (runJoebot conf) >>= wait
+  m <- readChan ch
+  case m of
+    Quit -> return ()
+    _    -> joebot conf
+
+-- | Takes a 'Config' and runs joebot2
+runJoebot :: Config -> IO ()
+runJoebot conf = bracket (connect conf) disconnect loop
   where disconnect = hClose . socket
         loop st    = runReaderT run st
 
@@ -63,6 +74,6 @@ run = do
   write "USER" (c^.nick <> " 0 * :" <> c^.rname)
   write "JOIN" (c^.chan)
   maybe (return ())
-        (\p -> privmsg "NickServ" Nothing $ "identify "<>(c^.nick)<>" "<>p) 
+        (\p -> privmsg "NickServ" Nothing $ "identify "<>(c^.nick)<>" "<>p)
         (c^.pass)
   asks socket >>= listen
