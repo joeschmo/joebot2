@@ -58,4 +58,4 @@ source = Command "!source" 0 source' "!source"
             "Documentation for joebot2 is found at: https://joeschmo.github.io/joebot2"
 
 version = Command "!version" 0 version' "!version"
-  where version' n ch args = privmsg n ch "joebot2 version 1.3"
+  where version' n ch args = privmsg n ch "joebot2 version 1.3.1"

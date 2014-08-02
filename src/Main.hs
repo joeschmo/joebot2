@@ -7,20 +7,21 @@ import Joebot.Plugins.Steam.Cmds
 
 import Control.Concurrent.Chan
 
-import System.Console.GetOpt
+import qualified Options.Applicative as OA
 import System.Environment
 import Test.QuickCheck
 
 import System.Exit
 import Control.Lens
 import Control.Monad.Reader
+import Control.Applicative
 import Data.Monoid
 import Joebot.Core
 import Joebot.Core.Tests
 
 main = do
-  argv <- getArgs
-  checkOpts argv $ do
+  fs <- OA.execParser opts
+  checkOpts fs $ do
     conf <- spawnProc defaultConfig
                       runMailServer
                       [mail, rcv, inbox]
@@ -29,24 +30,33 @@ main = do
                       False
     joebot $ conf
         & cmds %~ (<>) [roll, quit]
+  where
+    opts = OA.info (OA.helper <*> flags)
+      ( OA.fullDesc
+     <> OA.progDesc "Joebot2"
+     <> OA.header "joe_bot - a IRC bot written in haskell")
 
-data Flag = Testing
+data Flags = Flags
+  { testing :: Bool
+  , debug   :: Bool
+  }
 
-checkOpts argv action =
-  case getOpt Permute options argv of
-       (o,n,[]) -> runOpts o action
-       (_,_,err) -> action
+flags :: OA.Parser Flags
+flags = Flags
+  <$> OA.switch
+      ( OA.long "testing"
+     <> OA.help "Run joebot test suite")
+  <*> OA.switch
+      ( OA.long "debug"
+     <> OA.help "Run joebot in with debugging output")
 
-runOpts (Testing : rem) action = do
+checkOpts (Flags True _) action = runTests >> action
+checkOpts _ action = action
+
+runTests = do
   quickCheck prop_joinparse
   quickCheck prop_partparse
-  quickCheck prop_privmsgparse
-runOpts [] action = action
-
-
-options :: [OptDescr Flag]
-options =
-  [ Option [] ["testing"] (NoArg Testing) "Run joebot test suite" ]
+  quickCheck prop_privmsgparse 
 
 quit = Command "!quit" 0 quit' "!quit"
   where quit' _ _ _ = do
