@@ -11,6 +11,7 @@ import Text.Printf
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
 import qualified Data.Text.Encoding as E
+import qualified Data.Text.Encoding.Error as EE
 import qualified Data.ByteString as BS
 
 import Data.Monoid
@@ -35,7 +36,7 @@ connect c = notify $ do
 -- | and evaluate them.
 listen :: Handle -> Net ()
 listen h = forever $ 
-    pure (T.init . E.decodeUtf8) <*> liftIO (BS.hGetLine h) >>=
+    pure (T.init . E.decodeUtf8With EE.ignore) <*> liftIO (BS.hGetLine h) >>=
     (\s -> liftIO (T.putStrLn s) >>
       (eval . toResponse) s)
 

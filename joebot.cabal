@@ -19,5 +19,5 @@ Executable joe_bot
   Hs-Source-Dirs: src
   Build-Depends: base, text, bytestring, http-conduit, network,
                  containers, hashmap, vector, mtl, aeson, lens,
-                 attoparsec, random, QuickCheck, netwire
+                 attoparsec, random, QuickCheck, netwire, optparse-applicative
   Extensions: OverloadedStrings, TemplateHaskell

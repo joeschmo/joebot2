@@ -56,12 +56,18 @@ evalMsg (Msg n _ "!mail" txt) = do
         then return ["!mail <nick> <text>"]
         else do
             let rcp = head txt
-            let msg  = T.unwords $ tail txt
-            case mbox^.at n of
-              Nothing -> put (at rcp ?~ [(n, msg)] $ mbox)
-              Just ms -> put (at rcp ?~ ((n, msg) : ms) $ mbox)
-            return ["Sent."]
+            if not (validRcp rcp)
+              then return []
+              else do
+                let msg  = T.unwords $ tail txt
+                case mbox^.at n of
+                  Nothing -> put (at rcp ?~ [(n, msg)] $ mbox)
+                  Just ms -> put (at rcp ?~ ((n, msg) : ms) $ mbox)
+                return ["Sent."]
 evalMsg (Msg n _ _ txt) = return []
+
+validRcp :: T.Text -> Bool
+validRcp = (/= '#') . T.head
 
 queryBox :: Chan Msg -> T.Text -> Maybe T.Text
          -> T.Text -> [T.Text] -> T.Text -> Net ()
@@ -75,8 +81,11 @@ queryBox ch n chn cmd txt help = do
 send ch n chn txt = do
     liftIO $ writeChan ch $ Msg n chn "!mail" txt
     (Res msgs) <- liftIO $ readChan ch
-    mapM_ (privmsg n chn) msgs
-    privmsg (head txt) Nothing "You have new mail. Use !rcv to read."
+    case msgs of
+      [] -> privmsg n chn "Invalid recipient"
+      _  -> do
+        mapM_ (privmsg n chn) msgs
+        privmsg (head txt) Nothing "You have new mail. Use !rcv to read."
 
 receive ch n chn txt = queryBox ch n chn "!rcv" [] "Your inbox is empty."
 checkInbox ch n chn txt = queryBox ch n chn "!inbox" [] "!inbox"
