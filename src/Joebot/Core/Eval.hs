@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Joebot.Core.Eval where
+module Joebot.Core.Eval (eval, write, privmsg, action, getCmd) where
 
 import Network
 import System.IO
@@ -21,10 +21,16 @@ import Joebot.Core.Types
 
 -- | Takes a response and evaluates it.
 eval :: Response -> Net ()
-eval (Ping serv) = write "PONG" $ " :"<>serv
-eval (Part n ch) = asks config >>= mapM_ (($ ch) . ($ n)) . (^.phooks)
-eval (Join n ch) = asks config >>= mapM_ (($ ch) . ($ n)) . (^.jhooks)
-eval (Req req)   = do
+eval res = do
+  debug <- view (to config.debugMode)
+  when debug (liftIO $ putStrLn $ show res)
+  eval' res
+
+eval' :: Response -> Net ()
+eval' (Ping serv) = write "PONG" $ " :"<>serv
+eval' (Part n ch) = asks config >>= mapM_ (($ ch) . ($ n)) . (^.phooks)
+eval' (Join n ch) = asks config >>= mapM_ (($ ch) . ($ n)) . (^.jhooks)
+eval' (Req req)   = do
     cmd <- getCmd (req^.cname)
     case cmd of
       Nothing -> do
@@ -32,7 +38,7 @@ eval (Req req)   = do
         let txt = T.unwords (req^.cname : req^.tokens)
         mapM_ (($ txt) . ($ req^.name)) (c^.thooks)
       Just c  -> evalCmd c (req^.name) (req^.chn) (req^.tokens)
-eval _ = return ()
+eval' _ = return ()
 
 -- | Looks up a command from the configuration
 getCmd :: T.Text -> Net (Maybe Command)
@@ -61,7 +67,7 @@ privmsg n Nothing   s = write "PRIVMSG" $ n  <> " :" <> s
 
 -- | Running an action
 action :: T.Text -> Net ()
-action s = asks config >>= 
+action s = asks config >>=
   (\c -> write "PRIVMSG" $ (c^.chan) <> " :\001ACTION " <> s)
 
 

@@ -21,20 +21,25 @@ import Joebot.Core.Tests
 
 main = do
   fs <- OA.execParser opts
-  checkOpts fs $ do
-    conf <- spawnProc defaultConfig
-                      runMailServer
-                      [mail, rcv, inbox]
-                      [mHook]
-                      []
-                      False
-    joebot $ conf
-        & cmds %~ (<>) [roll, quit]
+  checkOpts fs
   where
     opts = OA.info (OA.helper <*> flags)
       ( OA.fullDesc
      <> OA.progDesc "Joebot2"
      <> OA.header "joe_bot - a IRC bot written in haskell")
+
+checkOpts fs = do
+  when (fs^.to testing) runTests
+  conf <- spawnProc defaultConfig
+                    runMailServer
+                    [mail, rcv, inbox]
+                    [mHook]
+                    []
+                    False
+  joebot $ conf
+    & cmds %~ (<>) [roll, quit]
+    & debugMode .~ (fs^.to debug)
+
 
 data Flags = Flags
   { testing :: Bool
@@ -50,13 +55,10 @@ flags = Flags
       ( OA.long "debug"
      <> OA.help "Run joebot in with debugging output")
 
-checkOpts (Flags True _) action = runTests >> action
-checkOpts _ action = action
-
 runTests = do
   quickCheck prop_joinparse
   quickCheck prop_partparse
-  quickCheck prop_privmsgparse 
+  quickCheck prop_privmsgparse
 
 quit = Command "!quit" 0 quit' "!quit"
   where quit' _ _ _ = do

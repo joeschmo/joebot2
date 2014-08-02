@@ -32,7 +32,20 @@ import Joebot.Plugins.Prelude
 --
 --      [@cmds@] see 'Cmds' for a list of all commands in the default configuration
 --
-defaultConfig = Config "default-bot" "ircbot" "irc.freenode.net" 6667 "#joebot-test" Nothing defaultCmds [] [] [] []
+defaultConfig = 
+  Config 
+    "default-bot" 
+    "ircbot" 
+    "irc.freenode.net" 
+    6667 
+    "#joebot-test" 
+    Nothing 
+    defaultCmds 
+    [] 
+    [] 
+    [] 
+    []
+    False
 
 defaultCmds = [ echo, poke, slap, spoil, itshere, botsnack, ping
               , commands, usage, source, version ]
@@ -49,7 +62,7 @@ run = do
   write "NICK" (c^.nick)
   write "USER" (c^.nick <> " 0 * :" <> c^.rname)
   write "JOIN" (c^.chan)
-  maybe (return ()) 
+  maybe (return ())
         (\p -> privmsg "NickServ" Nothing $ "identify "<>(c^.nick)<>" "<>p) 
         (c^.pass)
   asks socket >>= listen

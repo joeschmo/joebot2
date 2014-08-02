@@ -68,6 +68,8 @@ data Config = Config
     , _phooks :: [T.Text -> T.Text -> Net ()]
       -- | List of Channels Plugin Processes are listening on
     , _procChans :: [Chan Msg] 
+      -- | Flag to run the bot in debug mode
+    , _debugMode :: Bool
     }
 
 data Response = 
@@ -76,7 +78,7 @@ data Response =
   | Part T.Text T.Text -- nick chan
   | Ping T.Text
   | Txt T.Text
-  deriving Eq
+  deriving (Eq, Show) 
 
 data Request = Request
     { _name   :: T.Text
@@ -84,7 +86,7 @@ data Request = Request
     , _cname  :: T.Text
     , _tokens :: [T.Text]
     }
-    deriving Eq
+    deriving (Eq, Show)
 
 makeLenses ''Command
 makeLenses ''Config
