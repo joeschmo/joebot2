@@ -55,7 +55,7 @@ joebot :: Config -> IO ()
 joebot conf = do
   ch <- newChan
   let conf' = conf & procChans %~ (:) ch
-  async (runJoebot conf) >>= wait
+  async (runJoebot conf') >>= wait
   m <- readChan ch
   case m of
     Quit -> return ()
